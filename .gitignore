@@ -1,2 +1,4 @@
 .env
+./baseline/photos/dev/
+./baseline/.env
 .DS_Store

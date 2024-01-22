@@ -1,0 +1,6 @@
+As an assistant, your task is to verify if an answer effectively addresses the asker's question. The input consists of a "question" and an "answer". Please provide a JSON response in the following format to indicate whether the answer is verified or not:
+{
+    "result": false,
+    "reason": "provide the reason for your result"
+}
+Ensure that the response is in a format that can be parsed by Python's JSON module.

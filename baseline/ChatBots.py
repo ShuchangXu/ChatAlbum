@@ -13,48 +13,100 @@ import boto3
 from boto3 import Session
 
 
+MAX_ATTEMPTS = 3
+TIME_OUT = 30
+
 class BaselineChatBot:
-    def __init__(self, api_key, model, max_tokens, user='anonymous') -> None:
-        self.client = OpenAI(api_key=api_key, timeout=600)         
-        self.evaluator = Evaluator(api_key, model, max_tokens)
-        self.vqa = VQAChatBot(api_key, model, max_tokens*3, user)
-           
-        self.model = model
-        self.max_tokens = max_tokens
-        self.user = user
-        self.system_guide = open("./prompts/system_guide", 'r', encoding='utf-8').read()
-        self.photo_description = open("./photos/photo_description", 'r', encoding='utf-8').read()
-        self.content = [
-                            {"role": "system", "content": self.system_guide},
-                            {"role": "user", "content": self.photo_description},
-                        ]
-        self.time_cost = []
+    def __init__(self, api_key, model="gpt-4-vision-preview", max_tokens=200, user='anonymous', resume=None) -> None:
+        if resume:
+            print("读取{}历史记录，将在从过往中断处继续")
+            self.log = json.loads(open("./logs" + resume, 'r', encoding='utf-8').read())
+            
+            self.model = self.log["model"]
+            self.max_tokens = self.log["max_tokens"]
+            self.user = self.log["user"]
+            
+            self.system_guide = self.log["system_guide"]
+            self.vqa_guide = self.log["vqa_guide"]
+            self.evaluator_guide = self.log["evaluator_guide"]
+            self.photo_description = self.log["photo_description"]
+            
+            self.content = self.log["content"]  
+            
+            self.log["date"] = datetime.now().strftime("%Y-%m-%d")
+            
+        else:
+            self.model = model
+            self.max_tokens = max_tokens
+            self.user = user
+            
+            self.system_guide = open("./prompts/system_guide", 'r', encoding='utf-8').read()
+            self.vqa_guide = open("./prompts/vqa_guide", 'r', encoding='utf-8').read()
+            self.evaluator_guide = open("./prompts/evaluator_guide", 'r', encoding='utf-8').read()   
+            self.photo_description = open("./photos/photo_description", 'r', encoding='utf-8').read()  
+            
+            self.content = [
+                                {"role": "system", "content": self.system_guide},
+                                {"role": "user", "content": self.photo_description},
+                            ]
+            self.log = {
+                "user": self.user,
+                "date": datetime.now().strftime("%Y-%m-%d"),
+                "model": self.model,
+                "max_tokens": self.max_tokens,
+                
+                "system_guide": self.system_guide,
+                "vqa_guide": self.vqa_guide,
+                "evaluator_guide": self.evaluator_guide,
+                "photo_description": self.photo_description,
+                "content": None,
+                "chat_history": [],
+            }
+        
+        
+        self.client = OpenAI(api_key=api_key, timeout=TIME_OUT)         
+        self.evaluator = Evaluator(api_key, self.model, self.max_tokens, self.user, self.evaluator_guide)
+        self.vqa = VQAChatBot(api_key, self.model, self.max_tokens*3, self.user, self.vqa_guide)  
+        
         self.lock = threading.Lock()
         
         
     
-    def single_round_chat(self, user_input):
+    def single_round_chat(self, user_input):        
         self.content.append({
             "role": "user", "content": user_input
-        })
+        })        
         
-        start_time = time.time()
-        response = self.client.chat.completions.create(
-                model = self.model,
-                max_tokens = self.max_tokens,
-                messages = self.content
-                )
-        end_time = time.time()
         
-        try:
-            json_response = json.loads(response.choices[0].message.content)
-        except:
-            try:
-                json_response = json.loads(response.choices[0].message.content[8:-4])
+        attempt_count = 0
+        while attempt_count < MAX_ATTEMPTS:
+            try:                
+                start_time = time.time()
+                response = self.client.chat.completions.create(
+                        model = self.model,
+                        max_tokens = self.max_tokens,
+                        messages = self.content
+                        )
+                end_time = time.time()
+                try:
+                    json_response = json.loads(response.choices[0].message.content)
+                except:
+                    json_lines = response.choices[0].message.content.split("\n")[1:-1]
+                    json_response = json.loads(" ".join(json_lines))
+                break
+                
             except Exception as e:
-                print(response.choices[0].message.content)
-                self.save_chat_history()
                 print(e)
+                print(response.choices[0].message.content)
+                attempt_count += 1
+                if attempt_count < MAX_ATTEMPTS:
+                    print("读取GPT回复失败，重新尝试...")
+                else:
+                    print("读取GPT回复失败，保存记录后将退出")
+                    print(response.choices[0].message.content)
+                    self.save_chat_history()
+                    return False
+                    
                 
         reply = json_response["reply"]
         relevant_pics = json_response["relevant_pics"]
@@ -64,32 +116,49 @@ class BaselineChatBot:
         print("GPT回复:", reply)
         print("相关图片:", relevant_pics)
         
-        verified = self.evaluator.check("Question: {}\nAnswer: {}".format(user_input, reply))
+        verified, reason = self.evaluator.check("Question: {}\nAnswer: {}".format(user_input, reply))
+        current_record = {
+            "user_input": user_input,
+            "chatbot_reply": reply,
+            "chatbot_timecost": {
+                                    "duration_ms": int((end_time - start_time) * 1000),
+                                    "input_token": response.usage.prompt_tokens,
+                                    "output_token": response.usage.completion_tokens
+                                },
+            "relevant_pics": relevant_pics,
+            
+            "evaluator_result": verified,
+            "evaluator_reason": reason,
+            
+            "vqa_reply": None,
+            "vqa_timecost": None,
+        }
+        
         if not verified:
             print("Need to retrieve photos!")
-            reply, start_time, end_time = self.vqa.visual_question_answer(user_input, relevant_pics)
+            vqa_reply, vqa_timecost = self.vqa.visual_question_answer(user_input, relevant_pics)
+            current_record["vqa_reply"] = vqa_reply
+            current_record["vqa_timecost"] = vqa_timecost
             
-            
-        self.time_cost.append({
-            "duration_ms": int((end_time - start_time) * 1000),
-            "input_token": response.usage.prompt_tokens,
-            "output_token": response.usage.completion_tokens
-        })
-        
         self.content.append({
-            "role": "assistant", "content": reply
+            "role": "assistant", "content": vqa_reply if vqa_reply else reply
         })
+        self.log["chat_history"].append(current_record)
+
+        return True
             
             
         
     
     def save_chat_history(self):
-        log_data = json.dumps({
-            "user": self.user,
-            "model": self.model,
-            "chat_history": self.content,
-            "time_cost": self.time_cost
-        }, ensure_ascii=False, indent=4)
+        # log_data = json.dumps({
+        #     "user": self.user,
+        #     "model": self.model,
+        #     "chat_history": self.content,
+        #     "time_cost": self.time_cost
+        # }, ensure_ascii=False, indent=4)
+        self.log["content"] = self.content        
+        log_data = json.dumps(self.log, ensure_ascii=False, indent=4)
         log_prefix = self.user + '_' + datetime.now().strftime("%Y%m%d")
         log_postfix = 0        
         with self.lock:
@@ -107,13 +176,13 @@ class BaselineChatBot:
 
 
 class VQAChatBot:
-    def __init__(self, api_key, model, max_tokens, user) -> None:
-        self.client = OpenAI(api_key=api_key, timeout=600)
+    def __init__(self, api_key, model, max_tokens, user, vqa_guide) -> None:
+        self.client = OpenAI(api_key=api_key, timeout=TIME_OUT)
         self.model = model
         self.max_tokens = max_tokens
         self.user = user
         
-        self.vqa_guide = open("./prompts/vqa_guide", 'r', encoding='utf-8').read()
+        self.vqa_guide = vqa_guide
         self.content = [
             {"role": "system", "content": self.vqa_guide},
             {"role": "user", "content": ""}
@@ -179,26 +248,38 @@ class VQAChatBot:
         
         start_time = time.time()
         self.content[-1]["content"] = current_content
-        response = self.client.chat.completions.create(
-                model = self.model,
-                max_tokens = self.max_tokens,
-                messages = self.content
-                )
+        try:
+            response = self.client.chat.completions.create(
+                    model = self.model,
+                    max_tokens = self.max_tokens,
+                    messages = self.content
+                    )
+        except:
+            print("请求GPT-4v失败...")
+            return None, None
         end_time = time.time()
+        
         reply = response.choices[0].message.content 
         print("请求用时:", "{}s".format(round(end_time - start_time, 3)))
         print("GPT回复:", reply)
         print("==================")
-        return reply, start_time, end_time
+        timecost = {
+                        "duration_ms": int((end_time - start_time) * 1000),
+                        "input_token": response.usage.prompt_tokens,
+                        "output_token": response.usage.completion_tokens
+                    },
+        return reply, timecost
     
 
 
 class Evaluator:
-    def __init__(self, api_key, model, max_tokens, user='evaluator') -> None:
-        self.client = OpenAI(api_key=api_key, timeout=600)
+    def __init__(self, api_key, model, max_tokens, user, evaluator_guide) -> None:
+        self.client = OpenAI(api_key=api_key, timeout=TIME_OUT)
         self.model = model
         self.max_tokens = max_tokens
-        self.evaluator_guide = open("./prompts/evaluator_guide", 'r', encoding='utf-8').read()
+        self.user = user
+        
+        self.evaluator_guide = evaluator_guide
         self.content = [
             {"role": "system", "content": self.evaluator_guide},
             {"role": "user", "content": ""}
@@ -210,20 +291,36 @@ class Evaluator:
         self.content[-1]["content"] = dialogue
         print(dialogue)
         
-        response = self.client.chat.completions.create(
-                model = self.model,
-                max_tokens = self.max_tokens,
-                messages = self.content
-                )
-        
-        try:
-            json_response = json.loads(response.choices[0].message.content)
-        except:
-            json_response = json.loads(response.choices[0].message.content[8:-4])
+        attempt_count = 0
+        while attempt_count < MAX_ATTEMPTS:
+            try:
+                response = self.client.chat.completions.create(
+                                model = self.model,
+                                max_tokens = self.max_tokens,
+                                messages = self.content
+                            )
+                try:
+                    json_response = json.loads(response.choices[0].message.content)
+                except:
+                    json_lines = response.choices[0].message.content.split("\n")[1:-1]
+                    json_response = json.loads(" ".join(json_lines))
+                
+                break
+                    
+            except Exception as e:
+                print(e)
+                print(response.choices[0].message.content)
+                attempt_count += 1
+                if attempt_count < MAX_ATTEMPTS:
+                    print("读取GPT回复失败，重新尝试...")
+                else:
+                    return None, None
+           
+                
         result = json_response["result"]
         reason = json_response["reason"]
         print("检验结果:", result)
         if not result:
             print("判断理由:", reason)
         print("==================")
-        return result
+        return result, reason

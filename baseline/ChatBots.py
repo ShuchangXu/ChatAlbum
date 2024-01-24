@@ -48,12 +48,16 @@ class BaselineChatBot:
         
         try:
             json_response = json.loads(response.choices[0].message.content)
-            reply = json_response["reply"]
-            relevant_pics = json_response["relevant_pics"]
         except:
-            json_response = json.loads(response.choices[0].message.content[8:-4])
-            reply = json_response["reply"]
-            relevant_pics = json_response["relevant_pics"]
+            try:
+                json_response = json.loads(response.choices[0].message.content[8:-4])
+            except Exception as e:
+                print(response.choices[0].message.content)
+                self.save_chat_history()
+                print(e)
+                
+        reply = json_response["reply"]
+        relevant_pics = json_response["relevant_pics"]
         
         
         print("请求用时:", "{}s".format(round(end_time - start_time, 3)))
@@ -212,7 +216,10 @@ class Evaluator:
                 messages = self.content
                 )
         
-        json_response = json.loads(response.choices[0].message.content)
+        try:
+            json_response = json.loads(response.choices[0].message.content)
+        except:
+            json_response = json.loads(response.choices[0].message.content[8:-4])
         result = json_response["result"]
         reason = json_response["reason"]
         print("检验结果:", result)

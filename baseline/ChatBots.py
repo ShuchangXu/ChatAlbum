@@ -19,8 +19,8 @@ TIME_OUT = 30
 class BaselineChatBot:
     def __init__(self, api_key, model="gpt-4-vision-preview", max_tokens=200, user='anonymous', resume=None) -> None:
         if resume:
-            print("读取{}历史记录，将在从过往中断处继续")
-            self.log = json.loads(open("./logs" + resume, 'r', encoding='utf-8').read())
+            print("读取{}历史记录，将在从过往中断处继续".format(resume))
+            self.log = json.loads(open("./logs/" + resume, 'r', encoding='utf-8').read())
             
             self.model = self.log["model"]
             self.max_tokens = self.log["max_tokens"]
@@ -88,6 +88,7 @@ class BaselineChatBot:
                         messages = self.content
                         )
                 end_time = time.time()
+                
                 try:
                     json_response = json.loads(response.choices[0].message.content)
                 except:
@@ -97,15 +98,23 @@ class BaselineChatBot:
                 
             except Exception as e:
                 print(e)
+                print("ChatBot GPT回复读取失败，原回复如下:")
                 print(response.choices[0].message.content)
-                attempt_count += 1
-                if attempt_count < MAX_ATTEMPTS:
-                    print("读取GPT回复失败，重新尝试...")
-                else:
-                    print("读取GPT回复失败，保存记录后将退出")
-                    print(response.choices[0].message.content)
-                    self.save_chat_history()
-                    return False
+                try:
+                    json_response = json.loads(input("请选出reply与relevant_pics内容，以json格式输入: "))
+                    break
+                
+                except:
+                    attempt_count += 1
+                    if attempt_count < MAX_ATTEMPTS:
+                        print("读取GPT回复失败，重新尝试...")
+                    else:
+                        print("读取GPT回复失败，保存记录后将退出")
+                        print(response.choices[0].message.content)
+                        self.save_chat_history()
+                        return False                  
+                
+                
                     
                 
         reply = json_response["reply"]
@@ -299,22 +308,28 @@ class Evaluator:
                                 max_tokens = self.max_tokens,
                                 messages = self.content
                             )
+                
                 try:
                     json_response = json.loads(response.choices[0].message.content)
                 except:
                     json_lines = response.choices[0].message.content.split("\n")[1:-1]
                     json_response = json.loads(" ".join(json_lines))
-                
                 break
                     
             except Exception as e:
                 print(e)
+                print("Evaluator GPT回复读取失败，原回复如下:")
                 print(response.choices[0].message.content)
-                attempt_count += 1
-                if attempt_count < MAX_ATTEMPTS:
-                    print("读取GPT回复失败，重新尝试...")
-                else:
-                    return None, None
+                try:
+                    json_response = json.loads(input("请选出reply与relevant_pics内容，以json格式输入: "))
+                    break
+                
+                except:
+                    attempt_count += 1
+                    if attempt_count < MAX_ATTEMPTS:
+                        print("读取GPT回复失败，重新尝试...")
+                    else:
+                        return None, None
            
                 
         result = json_response["result"]

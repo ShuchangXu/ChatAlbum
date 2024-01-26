@@ -143,7 +143,6 @@ class BaselineChatBot:
             "vqa_timecost": None,
         }
         
-        vqa_reply = None
         if not verified:
             print("Need to retrieve photos!")
             vqa_reply, vqa_timecost = self.vqa.visual_question_answer(user_input, relevant_pics)
@@ -199,13 +198,34 @@ class VQAChatBot:
         ]          
         
         self.photo_list = sorted(os.listdir("./photos/" + self.user))
+        self.bucket = "vislabttsasr"
+        self.s3 = boto3.client("s3")
+    #     self.change_bucket_policy()
+        
+            
+    # def __del__(self):
+    #     self.s3.delete_bucket_policy(Bucket=self.bucket)
+    #     print("Deleted s3 bucket policy")
         
     
-    
-    def encode_image(self, image_path):
-        with open(image_path, "rb") as image_file:
-            return base64.b64encode(image_file.read()).decode('utf-8')
-        
+    def change_bucket_policy(self):
+        bucket_policy = {
+                            "Version": "2012-10-17",
+                            "Id": "Policy",
+                            "Statement": [
+                                {
+                                    "Sid": "Stmt",
+                                    "Effect": "Allow",
+                                    "Principal": "*",
+                                    "Action": "s3:GetObject",
+                                    "Resource": "arn:aws:s3:::" + self.bucket + "/*"
+                                }
+                            ]
+                        }
+        self.s3.put_bucket_policy(
+            Bucket=self.bucket,
+            Policy=json.dumps(bucket_policy)
+        )
         
     
     def visual_question_answer(self, user_input, relevant_pics):
@@ -219,14 +239,21 @@ class VQAChatBot:
             photo_name = self.photo_list[id - 1]                
             photo_path = os.path.join("./photos", self.user, photo_name)
             
-            base64_img = self.encode_image(photo_path)
+            key = "{}_{}.jpg".format(self.user, id)
+            try:
+                self.s3.head_object(Bucket=self.bucket, Key=key)
+            except:
+                self.s3.upload_file(Filename=photo_path, Key=key, Bucket=self.bucket)
+            
+            img_url = f"https://{self.bucket}.s3.amazonaws.com/{key}"
+            print(img_url)
                 
             current_content.append({
-                    "type": "image_url",
-                    "image_url": {
-                        "url": f"data:image/jpg;base64,{base64_img}"
-                    }
-                })
+                "type": "image_url",
+                "image_url": {
+                    "url": img_url
+                }
+            })
         
         start_time = time.time()
         self.content[-1]["content"] = current_content

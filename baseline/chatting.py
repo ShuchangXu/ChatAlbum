@@ -1,10 +1,7 @@
 import os
-import time
-import json
 from ChatBots import BaselineChatBot
-from datetime import datetime
 from dotenv import load_dotenv
-from openai import OpenAI
+
 
 MAX_TOKENS = 200
 MODEL = "gpt-4-vision-preview"

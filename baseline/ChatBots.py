@@ -227,9 +227,7 @@ class HierarchyChatBot:
         scene, object, pics = self.attention_detector.single_round_detect(user_input)
         pics_info = ""
         for pic in pics:
-            pic_info = json.dumps({
-                str(pic): self.photos_info[str(pic)]
-            }, ensure_ascii=False)
+            pic_info = json.dumps(self.photos_info[str(pic)], ensure_ascii=False)
             pics_info += (pic_info + '\n')
             
         if len(pics_info) == 0:
@@ -253,39 +251,51 @@ class HierarchyChatBot:
                         )
                 end_time = time.time()
                 
-                try:
-                    json_response = json.loads(response.choices[0].message.content)
-                except:
-                    json_lines = response.choices[0].message.content.split("\n")[1:-1]
-                    json_response = json.loads(" ".join(json_lines))
+                reply = response.choices[0].message.content
+                # try:
+                #     json_response = json.loads(response.choices[0].message.content)
+                # except:
+                #     json_lines = response.choices[0].message.content.split("\n")[1:-1]
+                #     json_response = json.loads(" ".join(json_lines))
                 break
                 
             except Exception as e:
                 print(e)
                 print("HierarchyChatBot GPT回复读取失败，原回复如下:")
                 print(response.choices[0].message.content)
-                try:
-                    json_response = json.loads(input("请选出reply与relevant_pics内容，以json格式输入: "))
-                    break
                 
-                except:
-                    attempt_count += 1
-                    if attempt_count < MAX_ATTEMPTS:
-                        print("读取GPT回复失败，重新尝试...")
-                    else:
-                        print("读取GPT回复失败，保存记录后将退出")
-                        print(response.choices[0].message.content)
-                        self.save_chat_history()
-                        return False                  
+                attempt_count += 1
+                if attempt_count < MAX_ATTEMPTS:
+                    print("读取GPT回复失败，重新尝试...")
+                else:
+                    print("读取GPT回复失败，保存记录后将退出")
+                    print(response.choices[0].message.content)
+                    self.save_chat_history()
+                    return False      
+                
+                
+                # try:
+                #     json_response = json.loads(input("请选出reply与relevant_pics内容，以json格式输入: "))
+                #     break
+                
+                # except:
+                #     attempt_count += 1
+                #     if attempt_count < MAX_ATTEMPTS:
+                #         print("读取GPT回复失败，重新尝试...")
+                #     else:
+                #         print("读取GPT回复失败，保存记录后将退出")
+                #         print(response.choices[0].message.content)
+                #         self.save_chat_history()
+                #         return False                  
                                     
                 
-        reply = json_response["reply"]
-        relevant_pics = json_response["relevant_pics"]
+        # reply = json_response["reply"]
+        # relevant_pics = json_response["relevant_pics"]
         
         
         print("请求用时:", "{}s".format(round(end_time - start_time, 3)))
         print("GPT回复:", reply)
-        print("相关图片:", relevant_pics)
+        # print("相关图片:", relevant_pics)
         
         current_record = {
             "user_input": user_input,
@@ -298,7 +308,7 @@ class HierarchyChatBot:
                                     "input_token": response.usage.prompt_tokens,
                                     "output_token": response.usage.completion_tokens
                                 },
-            "relevant_pics": relevant_pics,
+            # "relevant_pics": relevant_pics,
         }
         
         self.content.append({

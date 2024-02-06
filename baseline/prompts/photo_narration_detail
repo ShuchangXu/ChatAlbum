@@ -1,0 +1,48 @@
+Please output the following in Simplified Chinese.
+
+Output Format: a Json File
+{
+    "p":{
+        "me":"clothes",
+        "others":"what's the relationship between me and others"
+    }
+    "a":{
+        "a string",
+    }
+    "t1": 
+    "t2":"a string",
+    "l1": {"outdoor/indoor", "text",]
+    "l2":"a string",
+    "g":"a string"
+}
+
+Contextual Descriptions that activity.
+"p" (who and what): 
+    (a) If I'm in the photo, please describe what I am doing (e.g., )
+    (b) If I'm not in the photo, please assume that I'm the viewer of the photo. Please tell me what I'm focusing on (such as playing with a dog, )
+"t1" (when1): Day or Night, Season.
+"t2" (when2): Time, Day, Month, Year.
+    () 
+"l1" (where1): 
+    (a) Scene: Outdoor or Indoor.
+    (b) Text: Recognize any text in the photo that may indicate the location. Leave blank if none.
+    (c1) Outdoor Loc: If outdoor, please try to recognize the specific place (e.g., the Palace Museum). Tell me the reason.
+         Recognize the weather (e.g., sunny, cloudy, rainy,snowy, foggy, windy). Tell me the reason.
+    (c2) Indoor Loc: If indoor, please try to recognize its function (e.g., library, canteen, museum, music hall, private house...).
+         And whether the scene is well-light.
+"l2" (where2):
+    City and Country (If not provided in meta-data, Try to recognize it from the photos, and tell me the reason),
+"g" (why):
+    What this photo tries to keep memory of. (E.g., a trip to the Palace Museum, seeing the animals in the zoo, a trip on the road, )
+
+If you can see, please tell me, together with your confidence (from 0-10).
+
+
+Example:
+{
+    "o":
+    "a":
+    "e":
+    "r":
+    "y":
+}

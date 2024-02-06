@@ -1,0 +1,69 @@
+Please predict the following information using the photo and its meta-data.
+
+________The items you need to predict:________
+"act": the activity of me in the photo. Please know I can not see, so do not use words such as see. 
+    "me": am I in the photo?
+    "activity":
+        If I'm in the photo: What am I wearing? What am I doing (e.g., being taken photos with friends, playing with a dog, playing piano on the stage)? Please describe the details of the other objects involved in my activity (e.g., the dog, the people). If there are other people interacting with me, Please describe our relationship.
+        If I'm not in the photo, please predict what I hope to remember by saving this photo. (e.g., to remember a cute dog, to remember several friends)
+
+"set": the setting of the photo.
+    "scn": is this an outdoor or indoor environment?
+    "weather": If outdoors, please tell me the weather (e.g., sunny, cloudy, rainy,snowy, foggy, windy). Leave blank if indoors.
+    "location": If outdoors, please try to guess the exact location (e.g., the Palace Museum), using the photo. Leave blank if indoors.
+    "func": Please specify the function of this place (e.g., park, library, museum, living room, music hall, kitchen...).
+
+"why": Please tell me What this photo tries to keep memory of. (E.g., a trip to the Palace Museum, seeing the animals in the zoo, a trip on the road, etc)
+
+________The items you need to predict:________
+For each item, please provide the following:
+"p": Your prediction results organized in a concise and informative string.
+"c": Please rate your confidence (certain - 3, very likely - 2, doubtful - 1, dont know - 0)
+"r": a concise reason how you predict this item.
+
+
+________Output format and examples:________
+Output Format: a Json File. The text should be in Simplified Chinese.
+
+The following is a concrete example:
+{
+    "act":{
+        "me":{
+            "p":True, 
+            "c":3, 
+            "r": "your face is in the photo"
+            },
+        "activity":{
+            "p":"You are playing with a dog, lying on the sofa. The dog is brown.", 
+            "c":3, 
+            "r": "photo recognition"
+            }
+    },
+    "set":{
+        "scn":{
+            "p":"indoor", 
+            "c":3, 
+            "r": "photo recognition"
+            },
+        "weather": {
+            "p": "", 
+            "c": 0, 
+            "r": "left blank"
+            },
+        "location": {
+            "p": "", 
+            "c": 0, 
+            "r": "left blank"
+            },
+        "func": {
+            "p": "living room", 
+            "c": 2, 
+            "r": "sofa"
+            }
+    },
+    "why":{
+        "p": "to remember your happy moment with the dog", 
+        "c": 2, 
+        "r": "common sense"
+    }
+}

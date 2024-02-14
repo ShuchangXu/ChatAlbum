@@ -26,7 +26,7 @@ if __name__=="__main__":
     while True:
         user_input = get_input()
         if user_input == "quit":
-            reviver.save_chat_history("cw")
+            reviver.save_chat_history("dev0214")
             break
         
         reply = reviver.chat(user_input)

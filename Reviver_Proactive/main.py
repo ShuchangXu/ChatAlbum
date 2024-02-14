@@ -1,13 +1,37 @@
 import os
+import time
+import keyboard
+from voice_interface import Recorder, Polly
 from reviver_pro import ReviverPro
 from dotenv import load_dotenv
 
+
+USE_VUI = False
+recorder = Recorder()
+polly = Polly()
+
+
 def agent_reply(reply):
     print("Agent:"+reply)
+    if USE_VUI:
+        try:
+            # Text-to-speech
+            polly.synthesize(reply)
+        except Exception as e:
+            print(e)
+        
 
 def get_input():
-    user_input = input("\nUser:")
-    return user_input
+    if USE_VUI:
+        print("请单击【空格键】开始说话:")
+        while True:
+            if keyboard.is_pressed('space'):
+                print("--检测到您按下了空格键--")
+                return recorder.start_recording()
+    else:
+        user_input = input("\nUser:")
+        return user_input
+
 
 if __name__=="__main__":
     load_dotenv()

@@ -1,0 +1,43 @@
+Agent:这是19年6月底,你在香港和广州拍摄的照片，一共有11张。其中有你在香港市区的拍照留念，有你在维多利亚港和朋友的合影，还有飞机和蓝天白云的照片。我们从第一个场景开始聊吧!
+
+User:好的
+Agent:第一个场景,是你在香港市区街道上的拍照留念，一共有4张照片。你穿着一条黄色连衣裙，在香港很多高楼前面拍照。看起来像是你在市区游玩。我的描述准确吗?你记得当时在做什么吗?
+
+User:不太记得了.我照片里都有什么?
+Debug Log:备选话题:0 照片里的楼很高，其中有一张照片拍摄于傍晚，你站在国际金融中心大楼前。这个楼有上百层。当时在市区玩的印象如何?对这些高楼有什么印象?
+1 照片既有白天，也有晚上。你们那天是在市区玩了一整天吗?都去了哪里?
+2 3张照片是你的单人照，1张照片是你和另一个朋友的合影。照片中，你都穿着黄色连衣裙，朋友则穿着黑色T恤和黑底蓝红花色裙子。你还有印象吗?
+
+Debug Log:抛出新的话题，编号:0
+Agent:在您提供的照片中，您身穿黄色连衣裙，在香港市区不同地点留下了美好的时刻。第一张照片显示您和一位朋友站在一条繁忙的街道上，背后是香港的高楼大厦和公交车等。第二张照片是晚上时分，您单独站在一座高耸的摩天大厦下，伸展双臂表现出一种欢快的姿态。第三张和第四张照片拍摄于夜晚，街道旁边有亮起霓虹灯的现代建筑群，您在镜另外,我还注意到照片里的楼很高，其中有一张照片拍摄于傍晚，你站在国际金融中心大楼前。这个楼有上百层。当时在市区玩的印象如何?对这些高楼有什么印象?
+
+User:印象不深了.好像楼 很高   
+Debug Log:备选话题:1 照片既有白天，也有晚上。你们那天是在市区玩了一整天吗?都去了哪里?
+2 3张照片是你的单人照，1张照片是你和另一个朋友的合影。照片中，你都穿着黄色连衣裙，朋友则穿着黑色T恤和黑底蓝红花色裙子。你还有印象吗?
+
+Debug Log:抛出新的话题，编号:1
+Agent:好的，香港确实以其摩天大楼著称，希望即使印象不深，您在那里的时光还是愉快的。如果有任何其他问题或想聊的话题，请随时告诉我！另外,我还注意到照片既有白天，也有晚上。你们那天是在市区玩了一整天吗?都去了哪里?
+
+User:不太记得了
+Debug Log:备选话题:2 3张照片是你的单人照，1张照片是你和另一个朋友的合影。照片中，你都穿着黄色连衣裙，朋友则穿着黑色T恤和黑底蓝红花色裙子。你还有印象吗?
+
+Debug Log:抛出新的话题，编号:2
+Agent:明白了，如果有其他需要帮助的地方，请随时告诉我。希望你有美好的一天！另外,我还注意到3张照片是你的单人照，1张照片是你和另一个朋友的合影。照片中，你都穿着黄色连衣裙，朋友则穿着黑色T恤和黑底蓝红花色裙子。你还有印象吗?
+
+User:没有太多印象
+Debug Log:备选话题:
+Agent:了解，如果将来有关于这些照片的任何问题或需要帮助，请随时联系我。祝您有个愉快的一天！关于香港市区街道场景，你还有更多问题吗?没有的话, 我们可以聊下一个场景。
+
+User:下一个场景 是什么
+Debug Log:用户是否同意:False
+Debug Log:抛出新的话题，编号:None
+Traceback (most recent call last):
+  File "/Users/codaxu/Documents/ChatAlbum/Reviver_Proactive/main.py", line 32, in <module>
+    reply = reviver.chat(user_input)
+  File "/Users/codaxu/Documents/ChatAlbum/Reviver_Proactive/reviver_pro.py", line 315, in chat
+    reply = self.next_event_or_not(user_input)
+  File "/Users/codaxu/Documents/ChatAlbum/Reviver_Proactive/reviver_pro.py", line 285, in next_event_or_not
+    reply = self.event_discussion(user_input)
+  File "/Users/codaxu/Documents/ChatAlbum/Reviver_Proactive/reviver_pro.py", line 225, in event_discussion
+    reply += "另外,我还注意到" + self.topics[self.curEid][tid]
+TypeError: list indices must be integers or slices, not NoneType

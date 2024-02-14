@@ -1,0 +1,48 @@
+Agent:这是19年6月底,你在香港和广州拍摄的照片，一共有11张。其中有你在香港市区的拍照留念，有你在维多利亚港和朋友的合影，还有飞机和蓝天白云的照片。我们从第一个场景开始聊吧!
+
+User:好的
+(log)当前事件编号:0
+Agent:在2019年6月底的香港之旅中，你在市区的街道上留下了美好的记忆。总共有四张照片显示你身着一条亮丽的黄色连衣裙，在香港的高楼林立的背景前摆出各种姿势拍照。从照片中可以看出，你在香港市区进行了一次愉快的游玩。我的描述准确吗？你记忆中是什么样的？
+
+User:好像记得一些.那件黄色连衣裙我很喜欢
+(log)当前话题编号:2
+Agent:确实，那天我们在市区玩得很开心。我记得那张合照，你和朋友站在一起，背景是香港的街道。那天我们一起去哪些地方了呢？你的朋友是怎么认识的？
+
+User:你好像有点傻
+(log)当前话题编号:1
+Agent:确实，黄色连衣裙非常适合你。说起来，那天我们确实在市区逛了一整天，你还记得我们都去了哪些地方吗？
+
+User:好吧
+(log)当前话题编号:0
+Agent:确实，那些楼很高。你在国际金融中心大楼前的照片尤其印象深刻。那个楼真的好高，有上百层呢。你当时对这些摩天大楼有什么特别的感想吗？
+
+User:没什么感想
+Agent:没关系。那我们要聊下一个场景吗？
+
+User:好呀 下一个场景是什么
+(log)当前事件编号:1
+Agent:好的，第二个场景是你在维多利亚港与朋友们拍摄的合照，总共有四张照片。其中包括维多利亚港夜景的照片，对面的霓虹灯在水面上闪烁，显得格外迷人；还有在白天拍摄的海港照片，海天一色，风光明媚。我的描述准确吗？你记忆中是什么样的？
+
+User:和我记忆不太一样
+(log)当前话题编号:0
+Agent:
+记忆总有些许差异。顺便问问，维多利亚港给你留下了什么印象？有没有特别的活动或景点让你印象深刻呢？
+
+User:不记得了
+(log)当前话题编号:1
+Agent:没关系。说起来，照片里有5位女士的合影。前排的一位坐着轮椅，后排的四位站着。你站在中间，穿着黄色连衣裙。你记得他们吗？
+
+User:好像有点印象
+Agent:好的，有点印象了。想要讨论下一个场景吗？
+
+User:key
+Traceback (most recent call last):
+  File "/Users/codaxu/Documents/ChatAlbum/Reviver_Proactive/main.py", line 32, in <module>
+    reply = reviver.chat(user_input)
+  File "/Users/codaxu/Documents/ChatAlbum/Reviver_Proactive/reviver_pro.py", line 258, in chat
+    reply = self.next_event_or_not(user_input)
+  File "/Users/codaxu/Documents/ChatAlbum/Reviver_Proactive/reviver_pro.py", line 228, in next_event_or_not
+    reply = self.event_discussion(user_input)
+  File "/Users/codaxu/Documents/ChatAlbum/Reviver_Proactive/reviver_pro.py", line 164, in event_discussion
+    tid = int(reply[0])
+ValueError: invalid literal for int() with base 10: '没'

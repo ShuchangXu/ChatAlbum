@@ -60,7 +60,7 @@ class Polly:
         # print('\"' + text + '\"')
         
         response = self.client.synthesize_speech(
-            LanguageCode="cmn-CN", Text=text, OutputFormat="pcm", VoiceId="Zhiyu")
+            LanguageCode="cmn-CN", Text=text, OutputFormat="pcm", VoiceId="Zhiyu", Engine="neural")
         
         if "AudioStream" in response:
             # Note: Closing the stream is important because the service throttles on the

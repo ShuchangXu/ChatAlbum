@@ -74,7 +74,7 @@ class ReviverPro:
         
         self.isTopicTalked = []
         for eid in range(self.evtCnt):
-            e_topicTalked = [False] * len(self.topics[eid])
+            e_topicTalked = [False for _ in range(len(self.topics[eid]))]
             self.isTopicTalked.append(e_topicTalked)
         
     

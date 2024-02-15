@@ -7,6 +7,9 @@ from datetime import datetime
 
 TIME_OUT = 30
 
+script_path = os.path.abspath(__file__)
+script_dir = os.path.dirname(script_path)
+
 def console_log(log):
     print("Debug Log:" + log)
 
@@ -51,34 +54,23 @@ class ReviverPro:
         # ________ User Info ________
         self.user = None
         self.photo_dir = None
+        self.json_dir = os.path.join(script_dir, "mtree_json")
     
     def init_mtree(self, user="dev0214"):
         self.user = user
         self.photo_dir = "./Reviver_Proactive/photos/" + self.user
+        
+        json_path = os.path.join(self.json_dir, self.user, "memory_tree.json")
+        mtree_json = json.loads(open(json_path, 'r', encoding='utf-8').read())
 
-        self.superE = "这是一九年6月底,你在香港和广州拍摄的照片，一共有11张。其中有你在香港市区的拍照留念，有你在维多利亚港和朋友的合影，还有飞机和蓝天白云的照片。"
-        self.events = ["第一个场景,是你在香港市区街道上的拍照留念，一共有4张照片。看起来像是你在市区游玩了一整天。",
-                       "第二个场景,是你在维多利亚港和朋友们的合影，一共有4张照片。既有夜景海港，对面霓虹灯闪烁；又有白天的海港。",
-                       "第三个场景,是乘坐飞机和汽车的照片，一共有4张。前两张是拍摄的飞机，似乎是在候机大厅。后两张拍摄的蓝天白云，像是从车窗外拍摄。"
-                       ]
-        self.shorts = ["香港市区街道","维多利亚港","乘坐飞机和汽车"]
-        self.photos = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+        self.superE = mtree_json["super_event"]
+        self.events = mtree_json["events"]
         self.evtCnt = len(self.events)
+        self.shorts = mtree_json["shorts"]
+        self.photos = mtree_json["photos"]
 
         # 每个事件的topic数目不得超过10!!!
-        self.topics = [
-            ["照片里的楼很高，其中有一张照片拍摄于傍晚，你站在国际金融中心大楼前。这个楼有上百层。当时在市区玩的印象如何?对这些高楼有什么印象?", 
-             "照片既有白天，也有晚上。你们那天是在市区玩了一整天吗?都去了哪里?", 
-             "3张照片是你的单人照，1张照片是你和另一个朋友的合影。照片中，你都穿着黄色连衣裙，朋友则穿着黑色T恤和黑底蓝红花色裙子。你还有印象吗?"
-            ],
-            ["照片中,维多利亚港对岸高楼林立,霓虹灯闪烁。水面上映出很亮的光。你对维多利亚港的印象如何，都玩了什么?",
-             "照片中,有5位女士的合影。前排的一位坐着轮椅，后排的四位站着。你站在中间，穿着黄色连衣裙。你记得他们吗?"
-            ],
-            ["照片中,飞机上写着中国南方航空。这是你们的飞机吗?你对那段飞行有什么印象吗?",
-             "照片中还有很美的云彩。蓝天上云朵密布。你是特地保留了这些云朵的照片吗",
-             "后两张照片, 像是你从车内向窗外拍摄。车窗外还能看到路上密集的车辆。当时是堵车了吗? "
-            ]
-        ]
+        self.topics = mtree_json["topics"]
         
         self.isTopicTalked = []
         for eid in range(self.evtCnt):

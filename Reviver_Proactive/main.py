@@ -6,7 +6,7 @@ from reviver_pro import ReviverPro
 from dotenv import load_dotenv
 
 
-USE_VUI = True
+USE_VUI = False
 recorder = Recorder()
 polly = Polly()
 
@@ -22,16 +22,15 @@ def agent_reply(reply):
         
 
 def get_input():
-    # if USE_VUI:
-    #     print("请单击【空格键】开始说话:")
-    #     while True:
-    #         if keyboard.is_pressed('space'):
-    #             print("--检测到您按下了空格键--")
-    #             user_input = recorder.start_recording()
-    #             print("User:"+user_input)
-    #             return user_input
-    # else:
-    if True:
+    if USE_VUI:
+        print("请单击【空格键】开始说话:")
+        while True:
+            if keyboard.is_pressed('space'):
+                print("--检测到您按下了空格键--")
+                user_input = recorder.start_recording()
+                print("User:"+user_input)
+                return user_input
+    else:
         user_input = input("\nUser:")
         return user_input
 

@@ -2,7 +2,7 @@ import os
 import time
 import keyboard
 from voice_interface import Recorder, Polly
-from reviver_pro import ReviverPro
+from reviver_pro_v2 import ReviverPro
 from dotenv import load_dotenv
 
 
@@ -38,15 +38,11 @@ def get_input():
 if __name__=="__main__":
     load_dotenv()
     api_key=os.getenv("OPENAI_API_KEY")
-    reviver = ReviverPro(api_key)
 
+    reviver = ReviverPro(api_key)
     reviver.init_mtree()
 
     reply = reviver.introduction()
-    agent_reply(reply)
-    user_input = get_input()
-
-    reply = reviver.first_event_intro(user_input)
     agent_reply(reply)
 
     while True:

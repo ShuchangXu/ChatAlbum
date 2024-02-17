@@ -576,6 +576,8 @@ class ReviverPro:
         reply = self.superE + "我们从第一个场景聊起吧，第一个场景是{}。".format(self.shorts[self.curEid])
         self.chat_history.append({"role": "assistant", "content": reply})
 
+        self.record_current_dialogue_turn(None, reply, None)
+
         return reply
     
     def generate_summary(self, user_input):

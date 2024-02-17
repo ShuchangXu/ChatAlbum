@@ -467,9 +467,16 @@ class ReviverPro:
         
         # reply = self.call_llm(content)
 
-        # eid = eType.NONE
-
         reply = input("\eid:")
+
+        corrected_reply = human_check_reply(reply, "event prediction")
+
+        self.original_eid = reply
+        self.corrected_eid = corrected_reply
+
+        reply = corrected_reply if corrected_reply else reply
+
+        eid = eType.NONE
 
         if reply == "E":
             eid = eType.NEXT
@@ -481,24 +488,7 @@ class ReviverPro:
             eid = int(reply)
             if eid >= self.evtCnt:
                 eid = self.evtCnt - 1
-        console_log("相关事件:{}".format(eid))
-        self.original_eid = reply
-        
-        corrected_eid = human_check_reply(reply, "event prediction")
-        self.corrected_eid = corrected_eid
-        
-        if corrected_eid == "E":
-            corrected_eid = eType.NEXT
-        elif corrected_eid == "P":
-            corrected_eid = eType.PREV
-        elif corrected_eid == "N":
-            corrected_eid = eType.NONE
-        elif corrected_eid is not None:
-            corrected_eid = int(reply)
-            
-        eid = corrected_eid if corrected_eid else eid
-        if corrected_eid:
-            console_log("修改后相关事件:{}".format(eid))
+
         return eid
     
     def state_controller(self, user_input):

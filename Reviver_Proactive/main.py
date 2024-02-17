@@ -40,7 +40,7 @@ if __name__=="__main__":
     api_key=os.getenv("OPENAI_API_KEY")
     
     user = "dev4exp"
-    resume = "dev4exp_20240217_6.log"
+    resume = None
     reviver = ReviverPro(api_key, user, resume)
     # reviver.init_mtree() # will be initialized inside __init___
 

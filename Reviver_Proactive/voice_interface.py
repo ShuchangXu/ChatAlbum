@@ -128,15 +128,16 @@ class Transcriber:
                     if job_status == 'COMPLETED':
                         # print(f"Download the transcript from\n")  
                             # f"\t{job['TranscriptionJob']['Transcript']['TranscriptFileUri']}.")
-                        try:
-                            response = requests.get(job['TranscriptionJob']['Transcript']['TranscriptFileUri'])
-                            open(os.path.join(script_dir, "transcript", file_name.split('.')[0]+'.json'), "wb").write(response.content)
+                        # try:
+                        response = requests.get(job['TranscriptionJob']['Transcript']['TranscriptFileUri'])
+                        open(os.path.join(script_dir, "transcript", file_name.split('.')[0]+'.json'), "wb").write(response.content)
                                                     
-                        except Exception as e:
-                            print("Error occurred when downloading file, error message:")
-                            print(e)
+                        # except Exception as e:
+                        #     print("Error occurred when downloading file, error message:")
+                        #     print(e)
                     else:
                         print("语音识别失败:(")
+                        return {"results": None}
                     break
                 else:
                     print("识别语音中...")
@@ -145,6 +146,7 @@ class Transcriber:
                           
         except Exception as e:
             # self.delete_job()
+            print("语音识别失败:(")
             return {"results": None}
         else:
             # self.delete_job()
@@ -206,23 +208,20 @@ class Recorder:
             # print(f"Saved to {file_path}") 
             
             result = self.transcriber.transcribe(file_name)["results"]
-            try:
+            if result:
                 transcripts = result["transcripts"]
                 for transcript in transcripts:
                     text += transcript["transcript"]
                 print("用户输入：", text)
-            
-            except:
-                print(result)
+            else:
+                # print(result)
                 print("识别失败")
-            
-            # if(result):
-            #     self.tts.synthesize(result, file_name)
-            # else:
-            #     print("无识别文本")
+                text = input("请手动输入用户回复：")
             
         except Exception as e:
-            print(e)   
+            # print(e) 
+            print("录音失败")
+            text = input("请手动输入用户回复：")  
                  
         self.frames = []
         return text

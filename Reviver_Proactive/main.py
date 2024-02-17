@@ -23,7 +23,7 @@ def agent_reply(reply):
 
 def get_input():
     if False:
-        print("请单击【空格键】开始说话:")
+        print("\n请单击【空格键】开始说话:")
         while True:
             if keyboard.is_pressed('space'):
                 print("--检测到您按下了空格键--")
@@ -37,9 +37,9 @@ def get_input():
 
 if __name__=="__main__":
     load_dotenv()
-    api_key=os.getenv("OPENAI_API_KEY")
+    api_key=os.getenv("GPT_API_KEY")
     
-    user = "dev0214"
+    user = "dev4exp"
     resume = None
     reviver = ReviverPro(api_key, user, resume)
 
@@ -61,3 +61,4 @@ if __name__=="__main__":
         except Exception as e:
             print(e)
             reviver.save_chat_history()
+            break

@@ -466,7 +466,7 @@ class ReviverPro:
         
         # reply = self.call_llm(content)
 
-        reply = input("\eid:")
+        reply = input("eid:")
 
         corrected_reply = human_check_reply(reply, "event prediction")
 

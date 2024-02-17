@@ -22,7 +22,7 @@ def agent_reply(reply):
         
 
 def get_input():
-    if USE_VUI:
+    if False:
         print("请单击【空格键】开始说话:")
         while True:
             if keyboard.is_pressed('space'):
@@ -42,7 +42,6 @@ if __name__=="__main__":
     user = "dev0214"
     resume = None
     reviver = ReviverPro(api_key, user, resume)
-    # reviver.init_mtree() # will be initialized inside __init___
 
     if not resume:
         reply = reviver.introduction()

@@ -1,4 +1,5 @@
 .env
+./Reviver_Proactive/.env
 ./baseline/photos/dev/
 ./baseline/.env
 .DS_Store

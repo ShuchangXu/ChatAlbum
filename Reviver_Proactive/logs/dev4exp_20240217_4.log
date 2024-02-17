@@ -1,6 +1,6 @@
 {
     "user": "dev4exp",
-    "datetime": "2024-02-17-17:32",
+    "datetime": "2024-02-17-17:33",
     "photo_dir": "E:\\VScode\\workfolder\\vislab\\uist2024\\ChatAlbum\\Reviver_Proactive\\photos\\dev4exp",
     "mtree": {
         "superE": "这是一九年6月底,你在香港和广州拍摄的照片，一共有11张。我把照片分成了三个场景，分别是: 你在香港市区的拍照留念，你在维多利亚港和朋友的合影，还有乘坐飞机和汽车的照片。",
@@ -59,6 +59,12 @@
             "user_input": null,
             "original_reply": "这是一九年6月底,你在香港和广州拍摄的照片，一共有11张。我把照片分成了三个场景，分别是: 你在香港市区的拍照留念，你在维多利亚港和朋友的合影，还有乘坐飞机和汽车的照片。我们先聊第一个场景吧!第一个场景是香港市区街道!",
             "corrected_reply": null
+        },
+        {
+            "dialogue_turn": 1,
+            "user_input": " 好呀！",
+            "original_reply": "关于用户想了解的内容，根据用户输入，用户并没有提供具体的问题或关注点，所以我们需要根据照片内容提供相关信息。照片里，用户在香港的街道上，身着一件黄色的长袖连衣裙，背景是香港市区的高楼和繁忙的街景。傍晚时分，天空呈现蓝色，而建筑物上的灯光已经点亮。因为这是第一次聊香港市区街道,我整体介绍下这个场景.第一个场景,是你在香港市区街道上的拍照留念，一共有4张照片。看起来像是你在市区游玩了一整天。我的描述准确吗?你记得当时在做什么吗?",
+            "corrected_reply": "quit"
         }
     ],
     "state_history": [
@@ -73,7 +79,40 @@
             "wanPending": false,
             "hasSuggested": false,
             "isEventTalked": [
+                true,
                 false,
+                false
+            ],
+            "isTopicTalked": [
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ]
+            ],
+            "ended": false
+        },
+        {
+            "dialogue_turn": 1,
+            "curEid": 0,
+            "switchingEvent": false,
+            "wandering": false,
+            "forwardProgress": 0,
+            "sumPending": false,
+            "evtPending": false,
+            "wanPending": false,
+            "hasSuggested": false,
+            "isEventTalked": [
+                true,
                 false,
                 false
             ],
@@ -100,6 +139,14 @@
         {
             "role": "assistant",
             "content": "这是一九年6月底,你在香港和广州拍摄的照片，一共有11张。我把照片分成了三个场景，分别是: 你在香港市区的拍照留念，你在维多利亚港和朋友的合影，还有乘坐飞机和汽车的照片。我们先聊第一个场景吧!第一个场景是香港市区街道!"
+        },
+        {
+            "role": "user",
+            "content": " 好呀！"
+        },
+        {
+            "role": "assistant",
+            "content": "quit"
         }
     ]
 }

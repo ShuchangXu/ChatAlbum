@@ -24,19 +24,23 @@ def json_parser(content):
     
     return json_response
 
-def human_check_reply(llm_reply):
-    print("Human Check LLM's reply/event prediction:", llm_reply)
-    admin_input = input("Press \"Enter\" to accept, otherwise please input a corrected reply:")
-    reply = None
+def human_check_reply(llm_reply, reply_type):
+    print("\n【实验后台】Human Check LLM's {}:".format(reply_type), llm_reply)
+    admin_input = input("【实验后台】Press \"Enter\" to accept, otherwise please input a corrected {}:".format(reply_type))
+    reply = llm_reply
     
     while True:
         if admin_input == "":
-            print("LLM's reply is accepted.")
-            return reply if reply != llm_reply else None
+            if reply == llm_reply:
+                print("【实验后台】LLM's {} is accepted.".format(reply_type))
+                return None
+            else:
+                print("【实验后台】Corrected {} is accepted.".format(reply_type))
+                return reply
         else:
             reply = admin_input
-            print("Corrected reply:", reply)
-            admin_input = input("Press \"Enter\" to accept, otherwise please input a new corrected reply:")
+            print("【实验后台】Corrected {}:".format(reply_type), reply)
+            admin_input = input("【实验后台】Press \"Enter\" to accept, otherwise please input a new corrected {}:".format(reply_type))
         
         
 
@@ -64,6 +68,8 @@ class ReviverPro:
 
             # ________ These variables tracked the progress ________
             self.curEid = 0
+            self.original_eid = None
+            self.corrected_eid = None
 
             self.switchingEvent = True
             self.wandering = False
@@ -84,9 +90,6 @@ class ReviverPro:
             self.chat_history = []
             self.dialogue_turn = -1 # then it will be 0 for introduction
 
-            # ________ OpenAI client ________
-            self.client = OpenAI(api_key=api_key, timeout=TIME_OUT)
-
             # ________ User Info ________
             self.user = user            
             self.photo_dir = os.path.join(SCRIPT_DIR, "photos", self.user)
@@ -98,6 +101,7 @@ class ReviverPro:
             #________ Log Content ________
             self.log = {
                 "user": self.user,
+                "resume": None,
                 "datetime": datetime.now().strftime("%Y-%m-%d-%H:%M"),
                 "photo_dir": self.photo_dir,
                 "mtree": {                    
@@ -117,8 +121,52 @@ class ReviverPro:
         
         else:
             self.log = json.loads(open(os.path.join(SCRIPT_DIR, "logs", resume), 'r', encoding='utf-8').read())
+            
+            self.user = self.log["user"]
+            self.photo_dir = self.log["photo_dir"]
+            
+            self.superE = self.log["mtree"]["superE"]
+            self.events = self.log["mtree"]["events"]
+            self.evtCnt = self.log["mtree"]["evtCnt"]
+            self.evtStr = self.log["mtree"]["evtStr"]
+            self.shorts = self.log["mtree"]["shorts"]
+            self.photos = self.log["mtree"]["photos"]
+            self.topics = self.log["mtree"]["topics"]
+            
+            self.reply_history = self.log["reply_history"]
+            self.state_history = self.log["state_history"]
+            self.chat_history = self.log["chat_history"]
+            
+            latest_state_history = self.state_history[-1]
+                        
+            self.dialogue_turn = latest_state_history["dialogue_turn"]
+            
+            self.original_eid = latest_state_history["original_eid"]
+            self.corrected_eid = latest_state_history["corrected_eid"]
+            
+            self.curEid = latest_state_history["curEid"]
+            self.switchingEvent = latest_state_history["switchingEvent"]
+            
+            self.wandering = latest_state_history["wandering"]
+            self.forwardProgress = latest_state_history["forwardProgress"]
+            
+            self.sumPending = latest_state_history["sumPending"]
+            self.evtPending = latest_state_history["evtPending"]
+            self.wanPending = latest_state_history["wanPending"]
+            
+            self.hasSuggested = latest_state_history["hasSuggested"]
+            
+            self.isEventTalked = latest_state_history["isEventTalked"]
+            self.isTopicTalked = latest_state_history["isTopicTalked"]
+            
+            self.ended = latest_state_history["ended"]     
+            
+            self.log["datetime"] = datetime.now().strftime("%Y-%m-%d-%H:%M"),
+            self.log["resume"] = resume              
         
         
+        # ________ OpenAI client ________
+        self.client = OpenAI(api_key=api_key, timeout=TIME_OUT)
         
         self.lock = threading.Lock()
         
@@ -185,6 +233,9 @@ class ReviverPro:
         
         self.log["state_history"].append({
             "dialogue_turn": self.dialogue_turn,
+            "original_eid": self.original_eid,
+            "corrected_eid": self.corrected_eid,
+            
             "curEid": self.curEid,
             "switchingEvent": self.switchingEvent,
             
@@ -202,7 +253,7 @@ class ReviverPro:
             "ended": self.ended
         })
         
-        if (self.dialogue_turn % 5) == 0 and self.dialogue_turn > 0:
+        if (self.dialogue_turn % 3) == 0 and self.dialogue_turn > 0:
             self.save_chat_history(self.log_path+".{}".format(self.dialogue_turn))
         
     def save_chat_history(self, log_path=None): 
@@ -431,7 +482,23 @@ class ReviverPro:
             if eid >= self.evtCnt:
                 eid = self.evtCnt - 1
         console_log("相关事件:{}".format(eid))
-
+        self.original_eid = reply
+        
+        corrected_eid = human_check_reply(reply, "event prediction")
+        self.corrected_eid = corrected_eid
+        
+        if corrected_eid == "E":
+            corrected_eid = eType.NEXT
+        elif corrected_eid == "P":
+            corrected_eid = eType.PREV
+        elif corrected_eid == "N":
+            corrected_eid = eType.NONE
+        elif corrected_eid is not None:
+            corrected_eid = int(reply)
+            
+        eid = corrected_eid if corrected_eid else eid
+        if corrected_eid:
+            console_log("修改后相关事件:{}".format(eid))
         return eid
     
     def state_controller(self, user_input):
@@ -512,13 +579,16 @@ class ReviverPro:
                         self.wandering = True
                         self.curEid = eid
 
+        
+        reply = self.proactive_discussion(user_input)
+                              
+        corrected_reply = human_check_reply(reply, "reply") # None if original reply is accepted
     #
     #
     # ________________________ Response Functions ________________________
     def introduction(self):
         reply = self.superE + "我们从第一个场景聊起吧，第一个场景是{}。".format(self.shorts[self.curEid])
         self.chat_history.append({"role": "assistant", "content": reply})
-        self.record_current_dialogue_turn(None, reply, None)
 
         return reply
     
@@ -539,6 +609,8 @@ class ReviverPro:
 
     
     def chat(self, user_input):
+        self.original_eid, self.corrected_eid = None, None
+
         if self.ended:
             reply = "the session has ended"
         else:
@@ -551,7 +623,7 @@ class ReviverPro:
 
             self.switchingEvent = False
         
-        corrected_reply = human_check_reply(reply) # None if original reply is accepted
+        corrected_reply = human_check_reply(reply, "reply") # None if original reply is accepted
         self.record_current_dialogue_turn(user_input, reply, corrected_reply)
         
         reply = corrected_reply if corrected_reply else reply 

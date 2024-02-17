@@ -6,7 +6,7 @@ from reviver_pro_v2 import ReviverPro
 from dotenv import load_dotenv
 
 
-USE_VUI = False
+USE_VUI = True
 recorder = Recorder()
 polly = Polly()
 

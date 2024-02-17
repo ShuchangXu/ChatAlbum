@@ -13,7 +13,7 @@ polly = Polly()
 
 def agent_reply(reply):
     print("\nAgent:"+reply)
-    if True:
+    if USE_VUI:
         try:
             # Text-to-speech
             polly.synthesize(reply)

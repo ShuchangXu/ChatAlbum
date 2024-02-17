@@ -579,10 +579,6 @@ class ReviverPro:
                         self.wandering = True
                         self.curEid = eid
 
-        
-        reply = self.proactive_discussion(user_input)
-                              
-        corrected_reply = human_check_reply(reply, "reply") # None if original reply is accepted
     #
     #
     # ________________________ Response Functions ________________________

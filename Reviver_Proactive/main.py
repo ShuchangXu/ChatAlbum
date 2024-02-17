@@ -37,9 +37,9 @@ def get_input():
 
 if __name__=="__main__":
     load_dotenv()
-    api_key=os.getenv("GPT_API_KEY")
+    api_key=os.getenv("OPENAI_API_KEY")
     
-    user = "dev4exp"
+    user = "dev0214"
     reviver = ReviverPro(api_key, user)
     # reviver.init_mtree() # will be initialized inside __init___
 

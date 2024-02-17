@@ -12,8 +12,8 @@ polly = Polly()
 
 
 def agent_reply(reply):
-    print("Agent:"+reply)
-    if USE_VUI:
+    print("\nAgent:"+reply)
+    if True:
         try:
             # Text-to-speech
             polly.synthesize(reply)
@@ -40,11 +40,15 @@ if __name__=="__main__":
     api_key=os.getenv("GPT_API_KEY")
     
     user = "dev4exp"
-    reviver = ReviverPro(api_key, user)
+    resume = "dev4exp_20240217_6.log"
+    reviver = ReviverPro(api_key, user, resume)
     # reviver.init_mtree() # will be initialized inside __init___
 
-    reply = reviver.introduction()
-    agent_reply(reply)
+    if not resume:
+        reply = reviver.introduction()
+        agent_reply(reply)
+    else:
+        agent_reply(reviver.chat_history[-1]["content"])
 
     while True:
         try:

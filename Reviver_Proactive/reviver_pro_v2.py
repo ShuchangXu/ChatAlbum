@@ -59,6 +59,7 @@ class ReviverPro:
         self.isEventTalked = None
         self.isTopicTalked = None
 
+        self.summarizing = False
         self.ended = False
 
         # Chat History
@@ -152,18 +153,150 @@ class ReviverPro:
                     }
                 })
         return current_content
-
-    # check whether the user has more questions
-    def require_vqa(self, user_input):
-        content = []
-        task = "请判断用户输入中是否包含提问。用户输入是:{}。你的输出，请只输出Y或N。Y代表符合条件，N则反之。".format(user_input)
-        content.append({"role": "user", "content": task})
-        
-        reply = self.call_llm(content)
-        console_log("用户是否提问:{}".format(reply))
-
-        return reply=="Y"
     
+    #
+    #
+    # ________________________ Replier ________________________
+
+    # # check whether the user has more questions
+    # def require_vqa(self, user_input):
+    #     content = []
+    #     task = "请判断用户输入中是否包含提问。用户输入是:{}。你的输出，请只输出Y或N。Y代表符合条件，N则反之。".format(user_input)
+    #     content.append({"role": "user", "content": task})
+        
+    #     reply = self.call_llm(content)
+    #     console_log("用户是否提问:{}".format(reply))
+
+    #     return reply=="Y"
+    
+    def replier(self, user_input):
+        content = []
+        content.extend(self.chat_history[(-6 if len(self.chat_history)>=6 else 0):])
+
+        task = "用户输入是:{}".format(user_input)
+
+        # add photos
+        photo_content = self.add_relevant_photo()
+        content.append({"role": "user", "content": photo_content})
+        task += "请你按如下步骤思考:\
+            (第一步) 根据对话历史和用户输入，判断用户想了解什么内容。\
+            (第二步) 请你找到照片中最相关的内容，简洁地回答用户。\
+            "
+        task += "如果用户没有想了解的内容,请你从'好的'、'没问题'、'没关系'中选择一个合适的回答,并直接输出。\
+            如果用户有想了解的内容, 请你按如下格式组织回答:\
+            你提到了(用户想了解的内容),\
+            我在照片里看到/没有看到(你从照片里看到的内容)\
+            "
+        
+        task += "以下是一些样例:\
+            (a) 用户说: 不太清楚了。 你的回答: 没关系。\
+            (b) 用户说: 我有印象。 你的回答: 好的。\
+            (c) 用户说: 好的。 你的回答: 好的。\
+            (d) 用户问: 我穿的什么衣服? 你的回答:你提到了你穿的衣服, 我在照片里看到,你穿的是绿色连衣裙，上面有白色花纹。\
+            (e) 用户说: 我只记得夜景很不错。你的回答:你提到了夜景, 我在照片里看到,高楼灯火通明，灯光也是五颜六色的。\
+            (f) 用户说: 我记得吃的很好，吃了很多餐厅。 你的回答:你提到了餐厅，我在照片里没有看到食物或餐厅。\
+            "
+        
+        task += "在回答中,请务必注意:\
+            (1) 你的回答必须忠于照片，不要想象照片外的内容。\
+            (2) 你的回答必须是事实描述，请描述尽可能多的视觉信息，比如颜色和形状。不要带有主观判断。\
+            (3) 请不要逐个描述每张照片。不要在回答中提到第X张照片. \
+            (4) 请完全用陈述句,不要向用户提问。\
+            (5) 不要超过100字。\
+            "
+        content.append({"role": "user", "content": task})
+        reply = self.call_llm(content)
+        return reply
+    
+    #
+    #
+    # ________________________ Inspirer ________________________
+        
+    # def topic_to_discuss(self):
+    #     candidates = ""
+    #     topics = self.topics[self.curEid]
+    #     talked = self.isTopicTalked[self.curEid]
+
+    #     for i in range(len(talked)):
+    #         if not talked[i]:
+    #             candidates += str(i) + " " + topics[i] + "\n"
+    #     return candidates
+    
+    def get_one_topic(self):
+        topics = self.topics[self.curEid]
+        talked = self.isTopicTalked[self.curEid]
+
+        for i in range(len(talked)):
+            if not talked[i]:
+                return i
+        return None
+    
+    def event_intro(self):
+        reply = "因为这是第一次聊到{}的照片,我来整体向您介绍下。这是您照片中的第{}个场景,".format(self.shorts[self.curEid], str(self.curEid+1))
+        reply += self.events[self.curEid]
+        reply += "我的描述准确吗?你记得当时在做什么吗?"
+
+        self.isEventTalked[self.curEid] = True
+
+        return reply
+
+    def sug_new_topic(self):
+        tid = self.get_one_topic()
+        reply = "从照片中,我还注意到:" + self.topics[self.curEid][tid]
+
+        console_log("抛出新的话题，编号:{}".format(tid))
+        self.isTopicTalked[self.curEid][tid] = True # 标记该话题已被讨论
+
+        return reply
+    
+    def sug_summary(self):
+        reply = "关于{}场景，我们聊了很多了。你还有更多问题吗?没有的话, 我会为您生成一段文字回忆录。".format(self.shorts[self.curEid])
+
+        self.sumPending = True
+        self.hasSuggested = True
+        return reply
+    
+    def sug_next_event(self):
+        reply = "关于{}场景，我们聊了很多了。你还有更多问题吗?没有的话, 我们可以聊下一个场景:{}。".format(self.shorts[self.curEid], self.shorts[self.curEid + 1])
+
+        self.evtPending = True
+        self.hasSuggested = True
+
+        return reply
+    
+    def sug_end_wander(self):
+        reply = "关于{}场景，我们聊了很多了。你还有更多问题吗?没有的话, 我们可以回到刚才在聊的场景:{}。".format(self.shorts[self.curEid], self.shorts[self.forwardProgress])
+
+        self.wanPending = True
+        self.hasSuggested = True
+
+        return reply
+
+    def inspirer(self):
+        inspiration = ""
+        
+        if self.isEventTalked[self.curEid] == False:# if first time talk, event intro
+            inspiration += self.event_intro()
+        elif self.get_one_topic() is not None:# if there are some topics left, then bring up new topics
+            if self.switchingEvent:
+                inspiration += "我们继续讨论{}的照片.".format(self.shorts[self.curEid])
+            inspiration += self.sug_new_topic()
+        # elif self.hasSuggested: # if suggested then
+        #     inspiration += "关于{}您还有其他想了解的吗?"
+        elif self.wandering:# if wandering, then go back
+            inspiration = self.sug_end_wander()
+        
+        elif self.curEid == self.evtCnt - 1:# if no more topics, then suggest generating a summary
+            inspiration = self.sug_summary()
+        
+        else:# if there is at least one new topic, then suggest moving on to the next topic
+            inspiration = self.sug_next_event()
+
+        return inspiration
+    
+    #
+    #
+    # ________________________ State Transition ________________________
     def user_agree(self, user_input):
         content = []
         content.append(self.chat_history[-1])
@@ -178,239 +311,30 @@ class ReviverPro:
         console_log("用户是否同意:{}".format(reply))
 
         return reply=="Y"
-    
-    def topic_to_discuss(self):
-        candidates = ""
-        topics = self.topics[self.curEid]
-        talked = self.isTopicTalked[self.curEid]
-
-        for i in range(len(talked)):
-            if not talked[i]:
-                candidates += str(i) + " " + topics[i] + "\n"
-        return candidates
-    
-    def get_one_topic(self):
-        topics = self.topics[self.curEid]
-        talked = self.isTopicTalked[self.curEid]
-
-        for i in range(len(talked)):
-            if not talked[i]:
-                return i
-        return None
-    
-    def simple_reply_helper(self, user_input):
-        content = []
-        content.extend(self.chat_history[(-6 if len(self.chat_history)>=6 else 0):])
-
-        task = "用户输入是:{}".format(user_input)
-
-        # add photos
-        photo_content = self.add_relevant_photo()
-        content.append({"role": "user", "content": photo_content})
-        task += "请你按如下步骤思考:\
-            (第一步) 根据对话历史和用户输入，判断用户想了解的是什么内容。\
-            (第二步) 请你找到照片中最相关的内容，简洁地回答用户。\
-            "
-        task += "请你按如下格式组织回答:\
-            关于(用户关心的内容),\
-            照片里(你从照片里看到的信息)\
-            "
-        
-        task += "以下是一些样例:\
-            (1) 用户问: 我穿的什么衣服? 你的回答:关于你穿的衣服, 照片里显示，你穿的是绿色连衣裙，上面有白色花纹。\
-            (2) 用户说: 我只记得夜景很不错。你的回答:关于夜景, 照片中的高楼灯火通明，灯光也是五颜六色的。\
-            (3) 用户说: 我记得吃的很好，吃了很多餐厅。 你的回答:关于你提到的餐厅，照片里没有看到食物或餐厅。\
-            "
-        
-        task += "在回答中,请务必注意:\
-            (1) 你的回答必须忠于照片，不要想象照片外的内容。\
-            (2) 你的回答必须是事实描述，请描述尽可能多的视觉信息，比如颜色和形状。不要带有主观判断。\
-            (3) 请不要逐个描述每张照片。不要在回答中提到第X张照片. \
-            (4) 请完全用陈述句,不要向用户提问。\
-            (5) 不要超过100字。\
-            "
-        # 是否有问题? 有的话要回答问题。
-        # if self.require_vqa(user_input):
-
-        # else:
-        #     task += "请按如下规则回复用户:(1)如果用户描述超过20个字，请回复: 你的描述很吸引人。(2)如果用户说记不太清了，请你回复:没关系。(3)其他情况，请回复: 谢谢你的分享。注意：请不要说任何其他内容!"
-        
-        return content, task
-    
-    #
-    #
-    # ________________________ Suggesting next events ________________________
-    def sug_summary(self, user_input):
-        # first, request a simple reply
-        content, task = self.simple_reply_helper(user_input)
-        content.append({"role": "user", "content": task})
-        reply = self.call_llm(content)
-
-        # then, suggest generating a summary
-        reply += "关于{}场景，你还有更多问题吗?没有的话, 我会为您生成一段文字回忆录。".format(self.shorts[self.curEid])
-        self.sumPending = True
-        self.hasSuggested = True
-        return reply
-    
-    def sug_next_event(self, user_input):
-        # first, request a simple reply
-        content, task = self.simple_reply_helper(user_input)
-        content.append({"role": "user", "content": task})
-        reply = self.call_llm(content)
-        
-        ## then, suggest moving on to the next event
-        reply += "关于{}场景，你还有更多问题吗?没有的话, 我们可以聊下一个场景:{}。".format(self.shorts[self.curEid], self.shorts[self.curEid + 1])
-        self.evtPending = True
-        self.hasSuggested = True
-
-        return reply
-    
-    def sug_end_wander(self, user_input):
-        # first, request a simple reply
-        content, task = self.simple_reply_helper(user_input)
-        content.append({"role": "user", "content": task})
-        reply = self.call_llm(content)
-
-        ## then, suggest go back to the non-wander event
-        reply += "关于{}场景，你还有更多问题吗?没有的话, 我们可以回到刚才在聊的场景:{}。".format(self.shorts[self.curEid], self.shorts[self.forwardProgress])
-        self.wanPending = True
-        self.hasSuggested = True
-
-        return reply
-    
-    def summary_or_not(self, user_input):
-        # check whether the user has more questions
-        agree = self.user_agree(user_input)
-
-        # if the user has no further questions, then move on 
-        if agree:
-            self.hasSuggested = False
-            console_log("生成回忆中")
-            reply = self.generate_summary()
-        # if the user has further questions, then reply
-        else:
-            reply = self.proactive_discussion(user_input)
-        return reply
-    
-    def next_event_or_not(self, user_input):
-        # check whether the user has more questions
-        agree = self.user_agree(user_input)
-
-        # if the user has no further questions, then move on 
-        if agree:
-            self.switchingEvent=True
-            self.curEid += 1
-            self.forwardProgress = self.curEid
-            self.hasSuggested = False
-            reply = self.proactive_discussion(user_input)
-        # if the user has further questions, then reply
-        else:
-            reply = self.proactive_discussion(user_input)
-        return reply
-    
-    def end_wander_or_not(self, user_input):
-        # check whether the user has more questions
-        agree = self.user_agree(user_input)
-
-        # if the user has no further questions, then move on 
-        if agree:
-            self.switchingEvent=True
-            self.curEid = self.forwardProgress
-            self.wandering = False
-            self.hasSuggested = False
-            reply = self.proactive_discussion(user_input)
-        # if the user has further questions, then reply
-        else:
-            reply = self.proactive_discussion(user_input)
-        return reply
-    
-    #
-    #
-    # ________________________ Mid-Level Functions ________________________
-    def event_intro(self, user_input):
-        # first, request a simple reply
-        content, task = self.simple_reply_helper(user_input)
-        content.append({"role": "user", "content": task})
-        reply = self.call_llm(content)
-        
-        reply += "因为这是第一次聊{},我整体介绍下这个场景.".format(self.shorts[self.curEid])
-        reply += self.events[self.curEid]
-        reply += "我的描述准确吗?你记得当时在做什么吗?"
-
-        self.isEventTalked[self.curEid] = True
-
-        return reply
-    
-    def sug_new_topic(self, user_input, candidate_topics = None):
-        # first, request a simple reply
-        content, task = self.simple_reply_helper(user_input)
-        content.append({"role": "user", "content": task})
-        reply = self.call_llm(content)
-
-        ## then, add a proactive strategy
-        # task += "然后，请你从以下候选话题中，选择一个最能和你的回复连贯起来的话题。候选话题是:{}".format(candidate_topics)
-        # task += "请以如下json格式输出:{\"id\":1,\"ans\":\"你的回答\"}"
-        # content.append({"role": "user", "content": task})
-
-        # raw_reply = self.call_llm(content)
-        # reply_json = json_parser(raw_reply)
-
-        tid = self.get_one_topic()
-
-        # 标记该话题已被讨论
-        console_log("抛出新的话题，编号:{}".format(tid))
-        reply += "另外，我注意到:" + self.topics[self.curEid][tid]
-        self.isTopicTalked[self.curEid][tid] = True
-
-        return reply
-    
-    def proactive_discussion(self, user_input):
-        # candidate_topics = self.topic_to_discuss()
-        # console_log("备选话题:{}".format(candidate_topics))
-        
-        reply = ""
-        if self.switchingEvent:
-            reply = "我们来聊关于{}的场景。".format(self.shorts[self.curEid])
-
-        if self.isEventTalked[self.curEid] == False:# if first time talk, event intro
-            reply += self.event_intro(user_input)
-        
-        elif self.get_one_topic() is not None:# if there are some topics left, then bring up new topics
-            reply += self.sug_new_topic(user_input)
-        
-        else:# if all the topics of the current event has been discussed, then suggest moving on
-            if self.wandering:# if wandering, then go back
-                reply += self.sug_end_wander(user_input)
-            
-            elif self.curEid == self.evtCnt - 1:# if no more topics, then suggest generating a summary
-                reply += self.sug_summary(user_input)
-            
-            else:# if there is at least one new topic, then suggest moving on to the next topic
-                reply += self.sug_next_event(user_input)
-
-        return reply
 
     def event_selector(self, user_input):
-        content = []
-        task = "你的任务是，根据用户输入，判断用户是否想谈论某一话题。用户输入是:{}。全部话题列表是:{}。每个话题编号后列出了对应的关键词。\n".format(user_input, self.evtStr)
-        task += "请按照如下步骤思考,并直接输出字母或数字编号.不要输出其他任何内容.\
-            (1) 用户是否表达想聊其他/下一个话题?类似表述有:'其他的','下一个','别的','还有什么?'等.如有,请直接输出E.反之继续思考。\
-            (2) 用户是否表达想回到上一个话题?类似表述有:'回到上一个话题','刚刚聊的是什么?'等.如有,请直接输出P.反之继续思考。\
-            (3) 用户是否提及了话题{}相关信息?如是,请直接输出数字{}。反之继续思考\
-            (4) 如果用户有明确提及想了解的内容,比如:'我的照片里有XX(公园合影)吗?'，'我们来聊聊XX(小猫)吧'，请根据用户提到的关键词XX，寻找最相关的话题,并输出话题的编号。\
-                如果没有，请直接输出N。\n".format(str(self.curEid),str(self.curEid))
-        task += "以下是一些示例。示例所使用的话题列表是:\
-            1 市区街道,高楼; 2 公园,草坪,狗; n3 喷泉\
-            (1) 用户输入: 我记得楼特别的高 输出:N 原因: 用户没有明确提及想了解的内容\
-            (2) 用户输入: 我的照片里有动物吗? 输出:2 原因: 话题2的关键词有狗，和用户的问题高度相关\
-            (3) 用户输入: 还有其他的照片吗? 输出:E 原因: 用户明确表达想聊其他话题\
-            (4) 用户输入: 我们回到上一个话题吧。 输出: P 原因: 用户明确表达想聊上一个话题\
-            "
-        content.append({"role": "user", "content": task})
+        # content = []
+        # task = "你的任务是，根据用户输入，判断用户是否想谈论某一话题。用户输入是:{}。全部话题列表是:{}。每个话题编号后列出了对应的关键词。\n".format(user_input, self.evtStr)
+        # task += "请按照如下步骤思考,并直接输出字母或数字编号.不要输出其他任何内容.\
+        #     (1) 用户是否表达想聊其他/下一个话题?类似表述有:'其他的','下一个','别的','还有什么?'等.如有,请直接输出E.反之继续思考。\
+        #     (2) 用户是否表达想回到上一个话题?类似表述有:'回到上一个话题','刚刚聊的是什么?'等.如有,请直接输出P.反之继续思考。\
+        #     (3) 用户是否提及了话题{}相关信息?如是,请直接输出数字{}。反之继续思考\
+        #     (4) 如果用户有明确提及想了解的内容,比如:'我的照片里有XX(公园合影)吗?'，'我们来聊聊XX(小猫)吧'，请根据用户提到的关键词XX，寻找最相关的话题,并输出话题的编号。\
+        #         如果没有，请直接输出N。\n".format(str(self.curEid),str(self.curEid))
+        # task += "以下是一些示例。示例所使用的话题列表是:\
+        #     1 市区街道,高楼; 2 公园,草坪,狗; n3 喷泉\
+        #     (1) 用户输入: 我记得楼特别的高 输出:N 原因: 用户没有明确提及想了解的内容\
+        #     (2) 用户输入: 我的照片里有动物吗? 输出:2 原因: 话题2的关键词有狗，和用户的问题高度相关\
+        #     (3) 用户输入: 还有其他的照片吗? 输出:E 原因: 用户明确表达想聊其他话题\
+        #     (4) 用户输入: 我们回到上一个话题吧。 输出: P 原因: 用户明确表达想聊上一个话题\
+        #     "
+        # content.append({"role": "user", "content": task})
         
-        reply = self.call_llm(content)
+        # reply = self.call_llm(content)
 
-        eid = eType.NONE
+        # eid = eType.NONE
+
+        reply = input("\eid:")
 
         if reply == "E":
             eid = eType.NEXT
@@ -420,50 +344,44 @@ class ReviverPro:
             eid = eType.NONE
         else:
             eid = int(reply)
+            if eid >= self.evtCnt:
+                eid = self.evtCnt - 1
         console_log("相关事件:{}".format(eid))
 
         return eid
-
-    #
-    #
-    # ________________________ Response Functions ________________________
-    def introduction(self):
-        reply = self.superE + "我们先聊第一个场景吧!第一个场景是{}!".format(self.shorts[self.curEid])
-        self.chat_history.append({"role": "assistant", "content": reply})
-
-        return reply
     
-    def generate_summary(self):
-        content = []
-        content.extend(self.chat_history)
+    def state_controller(self, user_input):
+        agree = False
 
-        task = "请根据上述对话历史，为用户生成一段回忆录。请忠于对话历史的表述，不要想象对话之外的内容。请将回复控制在200个字以内。:"
-        content.append({"role": "user", "content": task})
-        
-        reply = self.call_llm(content, max_tokens=500)
-
-        self.ended = True
-
-        return reply
-
-    
-    def chat(self, user_input):
         # check whether the user agrees to generate a summary
         if self.sumPending:
             self.sumPending = False
-            reply = self.summary_or_not(user_input)
+            agree = self.user_agree(user_input)
+            if agree:
+                self.summarizing = True
+                self.hasSuggested = False
 
         # check whether the user agrees to move on to the next event
         elif self.evtPending:
             self.evtPending = False
-            reply = self.next_event_or_not(user_input)
+            agree = self.user_agree(user_input)
+            if agree:
+                self.switchingEvent = True
+                self.hasSuggested = False
+                self.curEid += 1
+                self.forwardProgress = self.curEid
 
         # check whether the user agrees to end wandering
         elif self.wanPending:
             self.wanPending = False
-            reply = self.end_wander_or_not(user_input)
+            agree = self.user_agree(user_input)
+            if agree:
+                self.switchingEvent = True
+                self.hasSuggested = False
+                self.curEid = self.forwardProgress
+                self.wandering = False
         
-        else:
+        if not agree:
             # determine the event
             eid = self.event_selector(user_input)
 
@@ -498,8 +416,7 @@ class ReviverPro:
                         self.forwardProgress = self.curEid
 
                     elif (eid == eType.NEXT and self.curEid == self.evtCnt - 1):
-                        reply = "所有照片都有过讨论了, 我为您生成了一段回忆录:" + self.generate_summary()
-                        return reply
+                        self.summarizing = True
 
                     elif eid == eType.PREV:
                         # jump back
@@ -511,9 +428,44 @@ class ReviverPro:
                         self.wandering = True
                         self.curEid = eid
 
-        
-        reply = self.proactive_discussion(user_input)
+    #
+    #
+    # ________________________ Response Functions ________________________
+    def introduction(self):
+        reply = self.superE + "我们从第一个场景聊起吧，第一个场景是{}。".format(self.shorts[self.curEid])
+        self.chat_history.append({"role": "assistant", "content": reply})
 
+        return reply
+    
+    def generate_summary(self, user_input):
+        content = []
+        content.extend(self.chat_history)
+        content.append({"role": "user", "content": user_input})
+
+        task = "请根据上述对话历史，为用户生成一段回忆录。请忠于对话历史的表述，不要想象对话之外的内容。请将回复控制在200个字以内。:"
+        content.append({"role": "user", "content": task})
+        
+        reply = "这组照片一共有{}个场景，刚刚我们已经都讨论过了。我为您生成了以下回忆录:".format(str(self.evtCnt))
+        reply += self.call_llm(content, max_tokens=500)
+
+        self.ended = True
+
+        return reply
+
+    
+    def chat(self, user_input):
+        if self.ended:
+            reply = "the session has ended"
+        else:
+            self.state_controller(user_input)
+
+            if self.summarizing:
+                reply = self.generate_summary(user_input)
+            else:
+                reply = self.replier(user_input) + self.inspirer()
+
+            self.switchingEvent = False
+        
         self.chat_history.append({"role": "user", "content": user_input})
         self.chat_history.append({"role": "assistant", "content": reply})
 

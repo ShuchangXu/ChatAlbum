@@ -1,6 +1,7 @@
 import os
 import json
 import base64
+import keyboard
 import threading
 from enum import Enum
 from openai import OpenAI
@@ -8,8 +9,8 @@ from datetime import datetime
 
 TIME_OUT = 30
 
-script_path = os.path.abspath(__file__)
-script_dir = os.path.dirname(script_path)
+SCRIPT_PATH = os.path.abspath(__file__)
+SCRIPT_DIR = os.path.dirname(SCRIPT_PATH)
 
 def console_log(log):
     print("Debug Log:" + log)
@@ -23,6 +24,22 @@ def json_parser(content):
     
     return json_response
 
+def human_check_reply(llm_reply):
+    print("Human Check LLM's reply/event prediction:", llm_reply)
+    admin_input = input("Press \"Enter\" to accept, otherwise please input a corrected reply:")
+    reply = None
+    
+    while True:
+        if admin_input == "":
+            print("LLM's reply is accepted.")
+            return reply if reply != llm_reply else None
+        else:
+            reply = admin_input
+            print("Corrected reply:", reply)
+            admin_input = input("Press \"Enter\" to accept, otherwise please input a new corrected reply:")
+        
+        
+
 class eType(Enum):
     NONE = 'N'
     NEXT = 'E'
@@ -32,53 +49,93 @@ class ReviverPro:
     #
     #
     # ________________________ Initialization ________________________
-    def __init__(self, api_key):
-        # ________ This is the Memory Tree ________
-        # Photo Information
-        self.superE = None #"18年秋天，在青岛拍摄，一共有25张照片。其中有XXX，XXX等场景。"
-        self.evtCnt = 0 # number of events
-        self.events = None
-        self.topics = None
-        self.photos = None
+    def __init__(self, api_key, user="dev0214", resume=None):
+        if not resume:
+            # ________ This is the Memory Tree ________
+            # Photo Information
+            self.superE = None #"18年秋天，在青岛拍摄，一共有25张照片。其中有XXX，XXX等场景。"
+            self.evtCnt = 0 # number of events
+            self.events = None
+            self.topics = None
+            self.photos = None
+            
+            # User Narrations
+            self.event_narrations = None
+
+            # ________ These variables tracked the progress ________
+            self.curEid = 0
+
+            self.switchingEvent = True
+            self.wandering = False
+            self.forwardProgress = 0 # last event during recall
+
+            self.sumPending = False
+            self.evtPending = False
+            self.wanPending = False
+            self.hasSuggested = False
+
+            self.isEventTalked = None
+            self.isTopicTalked = None
+
+            self.summarizing = False
+            self.ended = False
+
+            # Chat History
+            self.chat_history = []
+            self.dialogue_turn = -1 # then it will be 0 for introduction
+
+            # ________ OpenAI client ________
+            self.client = OpenAI(api_key=api_key, timeout=TIME_OUT)
+
+            # ________ User Info ________
+            self.user = user            
+            self.photo_dir = os.path.join(SCRIPT_DIR, "photos", self.user)
+            self.json_dir = os.path.join(SCRIPT_DIR, "mtree_json", self.user)
+            
+            # ________ Initialize Mtree _______
+            self.init_mtree()
+            
+            #________ Log Content ________
+            self.log = {
+                "user": self.user,
+                "datetime": datetime.now().strftime("%Y-%m-%d-%H:%M"),
+                "photo_dir": self.photo_dir,
+                "mtree": {                    
+                    "superE": self.superE,
+                    "events": self.events,
+                    "evtCnt": self.evtCnt,
+                    "evtStr": self.evtStr,
+                    "shorts": self.shorts,
+                    "photos": self.photos,
+                    "topics": self.topics
+                },
+                
+                "reply_history": [],
+                "state_history": [],
+            }
+            
         
-        # User Narrations
-        self.event_narrations = None
-
-        # ________ These variables tracked the progress ________
-        self.curEid = 0
-
-        self.switchingEvent = True
-        self.wandering = False
-        self.forwardProgress = 0 # last event during recall
-
-        self.sumPending = False
-        self.evtPending = False
-        self.wanPending = False
-        self.hasSuggested = False
-
-        self.isEventTalked = None
-        self.isTopicTalked = None
-
-        self.summarizing = False
-        self.ended = False
-
-        # Chat History
-        self.chat_history = []
-
-        # ________ OpenAI client ________
-        self.client = OpenAI(api_key=api_key, timeout=TIME_OUT)
+        else:
+            self.log = json.loads(open(os.path.join(SCRIPT_DIR, "logs", resume), 'r', encoding='utf-8').read())
+        
+        
+        
         self.lock = threading.Lock()
-
-        # ________ User Info ________
-        self.user = None
-        self.photo_dir = None
-        self.json_dir = os.path.join(script_dir, "mtree_json")
-    
-    def init_mtree(self, user="dev0214"):
-        self.user = user
-        self.photo_dir = "./Reviver_Proactive/photos/" + self.user
         
-        json_path = os.path.join(self.json_dir, self.user, "memory_tree.json")
+        # ______ Log Path _______
+        log_prefix = self.user + '_' + datetime.now().strftime("%Y%m%d")
+        log_postfix = 0        
+        with self.lock:
+            for filename in os.listdir("./Reviver_Proactive/logs"):
+                if filename.startswith(log_prefix):
+                    log_postfix += 1
+        self.log_path = "./Reviver_Proactive/logs/{}_{}.log".format(log_prefix, log_postfix)
+        with open(self.log_path, 'w', encoding='utf-8') as f:
+            f.write(" ")
+        
+    
+    def init_mtree(self):        
+        json_path = os.path.join(self.json_dir, "memory_tree.json")
         mtree_json = json.loads(open(json_path, 'r', encoding='utf-8').read())
 
         self.superE = mtree_json["super_event"]
@@ -117,18 +174,45 @@ class ReviverPro:
         with open(image_path, "rb") as image_file:
             return base64.b64encode(image_file.read()).decode('utf-8')
         
-    def save_chat_history(self, prefix):
-        log_prefix = prefix + '_' + datetime.now().strftime("%Y%m%d")
-        log_postfix = 0        
-        with self.lock:
-            for filename in os.listdir("./Reviver_Proactive/logs"):
-                if filename.startswith(log_prefix):
-                    log_postfix += 1
-        log_path = "./Reviver_Proactive/logs/{}_{}.log".format(log_prefix, log_postfix)
+    def record_current_dialogue_turn(self, user_input, original_reply, corrected_reply):
+        self.dialogue_turn += 1
+        self.log["reply_history"].append({
+            "dialogue_turn": self.dialogue_turn,
+            "user_input": user_input,
+            "original_reply": original_reply,
+            "corrected_reply": corrected_reply
+        })
+        
+        self.log["state_history"].append({
+            "dialogue_turn": self.dialogue_turn,
+            "curEid": self.curEid,
+            "switchingEvent": self.switchingEvent,
+            
+            "wandering": self.wandering,
+            "forwardProgress": self.forwardProgress,
 
+            "sumPending": self.sumPending,
+            "evtPending": self.evtPending,
+            "wanPending": self.wanPending,
+            "hasSuggested": self.hasSuggested,
+
+            "isEventTalked": self.isEventTalked,
+            "isTopicTalked": self.isTopicTalked,
+
+            "ended": self.ended
+        })
+        
+        if (self.dialogue_turn % 5) == 0 and self.dialogue_turn > 0:
+            self.save_chat_history(self.log_path+".{}".format(self.dialogue_turn))
+        
+    def save_chat_history(self, log_path=None): 
+        if not log_path:
+            log_path = self.log_path
+              
+        self.log["chat_history"] = self.chat_history
         with open(log_path, 'w', encoding='utf-8') as f:
-            f.write(json.dumps({"chat_history":self.chat_history}, ensure_ascii=False, indent=4))
-        print("本次聊天记录已保存至", log_path)
+            f.write(json.dumps(self.log, ensure_ascii=False, indent=4))
+        print("最新聊天记录已保存至", log_path)
 
     def add_relevant_photo(self):
         current_content = [{
@@ -434,6 +518,7 @@ class ReviverPro:
     def introduction(self):
         reply = self.superE + "我们从第一个场景聊起吧，第一个场景是{}。".format(self.shorts[self.curEid])
         self.chat_history.append({"role": "assistant", "content": reply})
+        self.record_current_dialogue_turn(None, reply, None)
 
         return reply
     
@@ -466,6 +551,11 @@ class ReviverPro:
 
             self.switchingEvent = False
         
+        corrected_reply = human_check_reply(reply) # None if original reply is accepted
+        self.record_current_dialogue_turn(user_input, reply, corrected_reply)
+        
+        reply = corrected_reply if corrected_reply else reply 
+
         self.chat_history.append({"role": "user", "content": user_input})
         self.chat_history.append({"role": "assistant", "content": reply})
 

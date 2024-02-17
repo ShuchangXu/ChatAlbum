@@ -53,12 +53,6 @@ class Polly:
         self.client = Session(profile_name="default").client("polly")
 
     def synthesize(self, text):
-        # text = ""           
-        # transcripts = input["transcripts"]
-        # for transcript in transcripts:
-        #     text += transcript["transcript"]
-        # print('\"' + text + '\"')
-        
         response = self.client.synthesize_speech(
             LanguageCode="cmn-CN", Text=text, OutputFormat="pcm", VoiceId="Zhiyu", Engine="neural")
         
@@ -76,7 +70,7 @@ class Polly:
 
                     while True:
                         data = pcm_stream.read(CHUNK)
-                        if not data:
+                        if not data or keyboard.is_pressed("space"):
                             break
                         stream.write(data)
 

@@ -37,19 +37,24 @@ def get_input():
 
 if __name__=="__main__":
     load_dotenv()
-    api_key=os.getenv("OPENAI_API_KEY")
-
-    reviver = ReviverPro(api_key)
-    reviver.init_mtree()
+    api_key=os.getenv("GPT_API_KEY")
+    
+    user = "dev4exp"
+    reviver = ReviverPro(api_key, user)
+    # reviver.init_mtree() # will be initialized inside __init___
 
     reply = reviver.introduction()
     agent_reply(reply)
 
     while True:
-        user_input = get_input()
-        if user_input == "quit":
-            reviver.save_chat_history("dev0214")
-            break
-        
-        reply = reviver.chat(user_input)
-        agent_reply(reply)
+        try:
+            user_input = get_input()
+            if user_input == "quit":
+                reviver.save_chat_history()
+                break
+            
+            reply = reviver.chat(user_input)
+            agent_reply(reply)
+        except Exception as e:
+            print(e)
+            reviver.save_chat_history()

@@ -53,7 +53,7 @@ class ReviverPro:
     #
     #
     # ________________________ Initialization ________________________
-    def __init__(self, api_key, user="dev0214", resume=None):
+    def __init__(self, api_key, user, resume=None):
         if not resume:
             # ________ This is the Memory Tree ________
             # Photo Information

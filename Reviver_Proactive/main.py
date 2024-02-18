@@ -39,7 +39,7 @@ if __name__=="__main__":
     load_dotenv()
     api_key=os.getenv("GPT_API_KEY")
     
-    user = "dev4exp"
+    user = "dev0214"
     resume = None
     reviver = ReviverPro(api_key, user, resume)
 

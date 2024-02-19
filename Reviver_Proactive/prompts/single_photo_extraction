@@ -1,51 +1,51 @@
-Two Photos and one meta-data have been provided to you.
 The first photo is the user's portrait.
 The second photo is the photo you are trying to extract information from.
-The meta-data of the second photo is provided in text.
+The meta-data of the second photo is provided in text (it could be empty, i.e., "").
 
 Please extract the following items based on the second photo and its metadata:
 
-[1] Who_What ("act"):
-[1.1] You ("u"): Describe whether the user is in the photo. Please use the user's portrait to recognize him or her.
-[1.2] Action ("action"):
+[1] You ("u"): Determine whether the user is in the photo. Please use the user's portrait to recognize him or her.
+
+[2] Who_What ("act"):
     If the user is in the photo, describe what the user is doing (e.g., "You were playing with a dog on the sofa.").
-    If the user am not the photo, describe the most prominent subjects and their activities (e.g., "A group of people is barbecuing.", "A dog is running").
+    If the user is not the photo, describe the most prominent subjects and their activities (e.g., "A group of people is barbecuing.", "A dog is running").
 
-[2] When_Where ("set"):
-[2.1] Scene ("scn"): Identify if the setting is indoors or outdoors.
-[2.2] Weather ("wea"): Identify the weather condition if outdoors. Choose from this list: sunny, cloudy, rainy, snowy, or foggy.
-[2.3] Location ("loc"): Recognize the specific location if outdoors (e.g., the Palace Musueum). 
-[2.4] Function ("func"): Describe the function of the place (e.g., park, library, museum, hallway, living room, kitchen).
+[3] When_Where ("set"):
+    Please first think in the following steps:
+    (a) Identify if the setting is indoors or outdoors.
+    (b) Identify the weather condition if outdoors. Choose from this list: sunny, cloudy, rainy, snowy, or foggy.
+    (c) Recognize the specific location if outdoors (e.g., the Palace Musueum). 
+    (d) Describe the function of the place (e.g., park, library, museum, hallway, living room, kitchen).
 
-[3] Narration ("nar"): Organize all the information in [1]-[3] into a concise narration. 
-    Please emphasize on the user and the activity. Avoid repetitive information.
-    Here are several good examples: 
-    "You were playing with a dog on the sofa. It seems like a living room."
-    "You were at the Palace Museum. You and two persons took many photos."
-    "You were not in the photo. But it seems that you are enjoying barbecue with many other people on the grass."
+    Then organize the information into one sentence. Here are several good examples:
+    "You were in an indoor space that seems like a living room. The room is well lit."
+    "You were at the Palace Museum. It is raining"
 
+[4] Objects ("obj"): Please list all the key objects (e.g., people, animals, food, landmarks, texts, etc) in the photo, and provide a detailed description for each object.
+    
+    Here are the guidelines:
+    For people, please include their gender, hairstyle, and clothes.
+    For animals, please include their species and visual details (color).
+    For food, please include their name, shape, and color.
+    For landmarks, please include their name, and color.
+    For texts, please include the original text, and the place it is showed on the picture (e.g., on an envelope, on a billboard, etc).
+    For any other objects, please include details like shapes, colors, and functions.
 
-Output should be formatted as a JSON file in Simplified Chinese.
+    Here are several good examples:
+    "我留着黄色长发，穿着黄色上衣、黑色裤子，正在摸着石碑"
+    "石碑是灰色的,上写着海拔1848米"
+    "我的身后是故宫，故宫整体是红色的，顶上有绿瓦"
 
-Example:
+Output should be formatted as a JSON file in Simplified Chinese. Please directly output the JSON. Do not add any additional words.
+
+Output Example:
 {
-    "act": {
-        "u": true,
-        "action":"你躺在沙发上,和一只狗玩耍。这只狗是一只柯基"
-    },
-    "set": {
-        "scn": "indoor",
-        "wea": "",
-        "loc": "",
-        "func": "客厅"
-        }
-    },
-    "why": {
-        "p": "记录你和狗快乐的时刻",
-        "c": 2,
-        "r": "推理"
-    },
-    "nar": {
-        "p": "你躺在沙发上, 和一只柯基狗玩耍。可能是在室内客厅"
-    }
+    "u": true,
+    "act": "你躺在沙发上,和一只狗玩耍。这只狗很可能是柯基",
+    "set": "环境在室内，看起来像是客厅。客厅中光线很好",
+    "obj": [
+        "你留着黑色短发",
+        "狗狗是黄色的，很可能是一只柯基",
+        "沙发是灰色，长条形状，布面材质"
+    ]
 }

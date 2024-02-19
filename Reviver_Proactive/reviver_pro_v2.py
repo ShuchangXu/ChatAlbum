@@ -36,7 +36,7 @@ def human_check_reply(llm_reply, reply_type="reply"):
         return None
     else:
         print("【实验后台】Corrected {} is accepted.".format(reply_type))
-        return reply
+        return admin_input
         # else:
         #     reply = admin_input
         #     print("【实验后台】Corrected {}:".format(reply_type), reply)
@@ -53,7 +53,7 @@ class ReviverPro:
     #
     #
     # ________________________ Initialization ________________________
-    def __init__(self, api_key, user="dev0214", resume=None):
+    def __init__(self, api_key, user, resume=None):
         if not resume:
             # ________ This is the Memory Tree ________
             # Photo Information
@@ -483,7 +483,7 @@ class ReviverPro:
             eid = eType.NEXT
         elif reply == "P":
             eid = eType.PREV
-        elif reply == "N":
+        elif reply in ("","N"):
             eid = eType.NONE
         else:
             eid = int(reply)

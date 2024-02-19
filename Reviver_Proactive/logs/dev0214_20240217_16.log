@@ -1,12 +1,12 @@
 {
-    "user": "dev4exp",
+    "user": "dev0214",
     "resume": null,
-    "datetime": "2024-02-17-22:06",
-    "photo_dir": "/Users/codaxu/Documents/ChatAlbum/Reviver_Proactive/photos/dev4exp",
+    "datetime": "2024-02-17-20:20",
+    "photo_dir": "/Users/codaxu/Documents/ChatAlbum/Reviver_Proactive/photos/dev0214",
     "mtree": {
         "superE": "这是一九年6月底,你在香港和广州拍摄的照片，一共有11张。我把照片分成了三个场景，分别是: 你在香港市区的拍照留念，你在维多利亚港和朋友的合影，还有乘坐飞机和汽车的照片。",
         "events": [
-            "一共有4张照片,记录了香港市区街道上,你的游览瞬间。照片里既有白天又有晚上,看起来像是你在市区游玩了一整天。",
+            "一共有4张照片,记录了香港市区街道上,你的正面照。照片里既有白天又有晚上,看起来像是你在市区游玩了一整天。",
             "一共有4张照片,记录了维多利亚港前,你和朋友们的合影。照片中既有白天,也有夜景。夜景下，港口对面霓虹灯闪烁。",
             "一共有4张照片,是关于飞机和车窗外风景的。前两张记录了候机厅外的飞机,后两张拍摄的是车窗外的蓝天白云。"
         ],
@@ -65,6 +65,8 @@
     "state_history": [
         {
             "dialogue_turn": 0,
+            "original_eid": null,
+            "corrected_eid": null,
             "curEid": 0,
             "switchingEvent": true,
             "wandering": false,
@@ -94,7 +96,6 @@
                     false
                 ]
             ],
-            "summarizing": false,
             "ended": false
         }
     ],

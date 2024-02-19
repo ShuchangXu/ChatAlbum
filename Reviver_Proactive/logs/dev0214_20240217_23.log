@@ -1,12 +1,12 @@
 {
-    "user": "dev4exp",
+    "user": "dev0214",
     "resume": null,
-    "datetime": "2024-02-17-22:06",
-    "photo_dir": "/Users/codaxu/Documents/ChatAlbum/Reviver_Proactive/photos/dev4exp",
+    "datetime": "2024-02-17-20:28",
+    "photo_dir": "/Users/codaxu/Documents/ChatAlbum/Reviver_Proactive/photos/dev0214",
     "mtree": {
         "superE": "这是一九年6月底,你在香港和广州拍摄的照片，一共有11张。我把照片分成了三个场景，分别是: 你在香港市区的拍照留念，你在维多利亚港和朋友的合影，还有乘坐飞机和汽车的照片。",
         "events": [
-            "一共有4张照片,记录了香港市区街道上,你的游览瞬间。照片里既有白天又有晚上,看起来像是你在市区游玩了一整天。",
+            "一共有4张照片,记录了香港市区街道上,你的正面照。照片里既有白天又有晚上,看起来像是你在市区游玩了一整天。",
             "一共有4张照片,记录了维多利亚港前,你和朋友们的合影。照片中既有白天,也有夜景。夜景下，港口对面霓虹灯闪烁。",
             "一共有4张照片,是关于飞机和车窗外风景的。前两张记录了候机厅外的飞机,后两张拍摄的是车窗外的蓝天白云。"
         ],
@@ -60,11 +60,19 @@
             "user_input": null,
             "original_reply": "这是一九年6月底,你在香港和广州拍摄的照片，一共有11张。我把照片分成了三个场景，分别是: 你在香港市区的拍照留念，你在维多利亚港和朋友的合影，还有乘坐飞机和汽车的照片。我们从第一个场景聊起吧，第一个场景是香港市区街道。",
             "corrected_reply": null
+        },
+        {
+            "dialogue_turn": 1,
+            "user_input": " 好的",
+            "original_reply": "好的。因为这是第一次聊到香港市区街道的照片,我来整体向您介绍下。这是您照片中的第1个场景,一共有4张照片,记录了香港市区街道上,你的正面照。照片里既有白天又有晚上,看起来像是你在市区游玩了一整天。我的描述准确吗?你记得当时在做什么吗?",
+            "corrected_reply": "quit"
         }
     ],
     "state_history": [
         {
             "dialogue_turn": 0,
+            "original_eid": null,
+            "corrected_eid": null,
             "curEid": 0,
             "switchingEvent": true,
             "wandering": false,
@@ -74,7 +82,7 @@
             "wanPending": false,
             "hasSuggested": false,
             "isEventTalked": [
-                false,
+                true,
                 false,
                 false
             ],
@@ -94,7 +102,41 @@
                     false
                 ]
             ],
-            "summarizing": false,
+            "ended": false
+        },
+        {
+            "dialogue_turn": 1,
+            "original_eid": "N",
+            "corrected_eid": null,
+            "curEid": 0,
+            "switchingEvent": false,
+            "wandering": false,
+            "forwardProgress": 0,
+            "sumPending": false,
+            "evtPending": false,
+            "wanPending": false,
+            "hasSuggested": false,
+            "isEventTalked": [
+                true,
+                false,
+                false
+            ],
+            "isTopicTalked": [
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ]
+            ],
             "ended": false
         }
     ],
@@ -102,6 +144,14 @@
         {
             "role": "assistant",
             "content": "这是一九年6月底,你在香港和广州拍摄的照片，一共有11张。我把照片分成了三个场景，分别是: 你在香港市区的拍照留念，你在维多利亚港和朋友的合影，还有乘坐飞机和汽车的照片。我们从第一个场景聊起吧，第一个场景是香港市区街道。"
+        },
+        {
+            "role": "user",
+            "content": " 好的"
+        },
+        {
+            "role": "assistant",
+            "content": "quit"
         }
     ]
 }

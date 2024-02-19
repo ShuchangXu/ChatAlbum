@@ -256,7 +256,7 @@ class ReviverPro:
         })
         
         if (self.dialogue_turn % 3) == 0 and self.dialogue_turn > 0:
-            self.save_chat_history(self.log_path+".{}".format(self.dialogue_turn))
+            self.save_chat_history(self.log_path)
         
     def save_chat_history(self, log_path=None): 
         if not log_path:

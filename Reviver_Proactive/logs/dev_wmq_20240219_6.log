@@ -1,0 +1,465 @@
+{
+    "user": "dev_wmq",
+    "resume": null,
+    "datetime": "2024-02-19-16:10",
+    "photo_dir": "E:\\VScode\\workfolder\\vislab\\uist2024\\ChatAlbum\\Reviver_Proactive\\photos\\dev_wmq",
+    "mtree": {
+        "superE": "这是2022年12月18日,你婚礼上的照片，一共有7张。我把照片分成了三个场景，分别是: 你骑在马上接亲的场景，婚礼仪式现场，还有亲友大合影。",
+        "events": [
+            "一共有3张照片,记录了你骑马接亲的场景。那天天气晴朗，亲友成群。街道两旁有很多绿树，可以看出是很美好的一天。",
+            "一共有3张照片,记录了婚礼仪式的现场,分别有拜天地、拜父母，对拜等场景。整个环境是暖黄色调，背景墙上写着王、李、喜字。",
+            "一共有1张照片,是亲友的大合影，照片中有接近40个人。新郎新娘站在舞台中央，身边围满了亲友。亲友的着装，大多是红色、黑色、白色、蓝色。"
+        ],
+        "evtCnt": 3,
+        "evtStr": "1 骑马接亲; 2 婚礼仪式; 3 亲友合影",
+        "shorts": [
+            "骑马接亲",
+            "婚礼仪式",
+            "亲友合影"
+        ],
+        "photos": [
+            [
+                1,
+                2,
+                3
+            ],
+            [
+                4,
+                5,
+                6
+            ],
+            [
+                7
+            ]
+        ],
+        "topics": [
+            [
+                "照片中，你身穿红色唐装，上面有金龙图案；袜子也是红色的。你对这身衣服有印象吗?",
+                "照片中，你骑着马，身旁有许多亲友。队伍后面有一个红色的轿子。轿子前面有演出队伍，他们系着腰鼓、敲着铜锣。你还记得当时的活动吗?",
+                "照片中还显示，你站在红色轿子旁边，掀起帘子。身旁充满五颜六色的泡泡。你记得当时的心情吗?",
+                "照片中的马，胸前系着红色大花。骑马的感受如何？",
+                "照片中，轿子两旁各有一个牌子，一个写着喜字，另一个写着迎亲。这个场景一定意义非凡"
+            ],
+            [
+                "照片中,你穿着红色金龙唐装，新娘穿着红色金凤唐装。你们先是对着镜头，敬拜天地；然后面向长辈，敬拜长辈；最后夫妻对拜。当时的心情如何?",
+                "婚礼现场的布景也很新引人。背景墙上写有喜字，两旁是金色的竹子和红色的玫瑰花。聚光灯将你们的影子投射到背景墙上，整个色调是暖黄色的，非常温馨。这是在哪里?",
+                "照片中，舞台上坐着几位长辈。一位是穿着红色大衣的女士，一位是穿着黑色正装，佩戴着胸花，手捧红色盒子的男士。还有一位是穿着红色唐装的老年女士。你记得这个场景吗?"
+            ],
+            [
+                "合影的布景很好，前景是两捧红花，天花板上还有水晶吊灯。这时你的心情如何?",
+                "照片中,新郎新娘两侧各站着一位小朋友，都是小男孩，看上去不到十岁。你记得他们吗?",
+                "照片一共有3排人，前面第一排以女士为主，后面两排以男士为主。当时都有哪些亲友到场了?"
+            ]
+        ]
+    },
+    "reply_history": [
+        {
+            "dialogue_turn": 0,
+            "user_input": null,
+            "original_reply": "这是2022年12月18日,你婚礼上的照片，一共有7张。我把照片分成了三个场景，分别是: 你骑在马上接亲的场景，婚礼仪式现场，还有亲友大合影。我们从第一个场景聊起吧，第一个场景是骑马接亲。",
+            "corrected_reply": null
+        },
+        {
+            "dialogue_turn": 1,
+            "user_input": " 好呀",
+            "original_reply": "好的，因为这是第一次聊到骑马接亲的照片,我来整体向您介绍下。这是您照片中的第1个场景,一共有3张照片,记录了你骑马接亲的场景。那天天气晴朗，亲友成群。街道两旁有很多绿树，可以看出是很美好的一天。我的描述准确吗?你记得当时在做什么吗?",
+            "corrected_reply": null
+        },
+        {
+            "dialogue_turn": 2,
+            "user_input": " 我当时在骑马嘛 我是在怎么样的街上骑马的？",
+            "original_reply": "你提到了街道，我在照片里看到你骑着马在宽敞且有树木装饰的街道上。街道两侧有高楼和绿植。天气晴朗，阳光明媚，你身后有一队身穿红色传统服饰的人，似乎是在进行婚礼庆典。从照片中,我还注意到:照片中，你身穿红色唐装，上面有金龙图案；袜子也是红色的。你对这身衣服有印象吗?",
+            "corrected_reply": null
+        },
+        {
+            "dialogue_turn": 3,
+            "user_input": "金龙图案是什么样的？我身后一队人大概是多少人呢？他们排得整齐吗",
+            "original_reply": "B\n\n金龙图案采用金色为主色调，整体造型为传统的中国龙形象，表现为盘曲的身体和张牙舞爪的样子，给人以庄严和喜庆的感觉。你身后的一队人大致有十余人，他们穿着红色的传统服饰，排列得相对整齐，跟随你的骑马队伍，营造出喜庆的氛围。从照片中,我还注意到:照片中，你骑着马，身旁有许多亲友。队伍后面有一个红色的轿子。轿子前面有演出队伍，他们系着腰鼓、敲着铜锣。你还记得当时的活动吗?",
+            "corrected_reply": null
+        },
+        {
+            "dialogue_turn": 4,
+            "user_input": "  我记得锣鼓喧天 可大声了 红色轿子是有人抬着吗？",
+            "original_reply": "B\n是的，红色轿子是由几个人抬着。轿子装饰华丽，顶部有传统的宫灯和穗饰，人们穿着节日的红色服装，看起来非常喜庆。轿子周围有泡泡飘洒，增添了欢乐的气氛。从照片中,我还注意到:照片中还显示，你站在红色轿子旁边，掀起帘子。身旁充满五颜六色的泡泡。你记得当时的心情吗?",
+            "corrected_reply": null
+        },
+        {
+            "dialogue_turn": 5,
+            "user_input": " 怎么会有泡泡？是泡泡水吹出来的透明泡泡吗",
+            "original_reply": "B\n是的，图片中的泡泡看起来像是由泡泡水吹出来的透明泡泡，环绕在红色轿子周围，为场景增添了欢乐气氛。从照片中,我还注意到:照片中的马，胸前系着红色大花。骑马的感受如何？",
+            "corrected_reply": null
+        },
+        {
+            "dialogue_turn": 6,
+            "user_input": " 好高好吓人啊！还好马很温驯",
+            "original_reply": "好的，马看起来确实很温驯。从照片中,我还注意到:照片中，轿子两旁各有一个牌子，一个写着喜字，另一个写着迎亲。这个场景一定意义非凡",
+            "corrected_reply": null
+        },
+        {
+            "dialogue_turn": 7,
+            "user_input": " 可以详细描述一下这个牌子吗",
+            "original_reply": "B\n照片中的牌子是红底金字的传统风格，上方写着“喜”字，象征着喜庆和幸福。牌子下方还装饰有金色的流苏和花纹，体现了浓厚的节日氛围。关于骑马接亲场景，我们聊了很多了。你还有更多问题吗?没有的话, 我们可以聊下一个场景:婚礼仪式。",
+            "corrected_reply": null
+        }
+    ],
+    "state_history": [
+        {
+            "dialogue_turn": 0,
+            "curEid": 0,
+            "switchingEvent": true,
+            "wandering": false,
+            "forwardProgress": 0,
+            "sumPending": false,
+            "evtPending": false,
+            "wanPending": false,
+            "hasSuggested": false,
+            "isEventTalked": [
+                true,
+                false,
+                false
+            ],
+            "isTopicTalked": [
+                [
+                    true,
+                    true,
+                    true,
+                    true,
+                    true
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ]
+            ],
+            "summarizing": false,
+            "ended": false
+        },
+        {
+            "dialogue_turn": 1,
+            "curEid": 0,
+            "switchingEvent": false,
+            "wandering": false,
+            "forwardProgress": 0,
+            "sumPending": false,
+            "evtPending": false,
+            "wanPending": false,
+            "hasSuggested": false,
+            "isEventTalked": [
+                true,
+                false,
+                false
+            ],
+            "isTopicTalked": [
+                [
+                    true,
+                    true,
+                    true,
+                    true,
+                    true
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ]
+            ],
+            "summarizing": false,
+            "ended": false
+        },
+        {
+            "dialogue_turn": 2,
+            "curEid": 0,
+            "switchingEvent": false,
+            "wandering": false,
+            "forwardProgress": 0,
+            "sumPending": false,
+            "evtPending": false,
+            "wanPending": false,
+            "hasSuggested": false,
+            "isEventTalked": [
+                true,
+                false,
+                false
+            ],
+            "isTopicTalked": [
+                [
+                    true,
+                    true,
+                    true,
+                    true,
+                    true
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ]
+            ],
+            "summarizing": false,
+            "ended": false
+        },
+        {
+            "dialogue_turn": 3,
+            "curEid": 0,
+            "switchingEvent": false,
+            "wandering": false,
+            "forwardProgress": 0,
+            "sumPending": false,
+            "evtPending": false,
+            "wanPending": false,
+            "hasSuggested": false,
+            "isEventTalked": [
+                true,
+                false,
+                false
+            ],
+            "isTopicTalked": [
+                [
+                    true,
+                    true,
+                    true,
+                    true,
+                    true
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ]
+            ],
+            "summarizing": false,
+            "ended": false
+        },
+        {
+            "dialogue_turn": 4,
+            "curEid": 0,
+            "switchingEvent": false,
+            "wandering": false,
+            "forwardProgress": 0,
+            "sumPending": false,
+            "evtPending": false,
+            "wanPending": false,
+            "hasSuggested": false,
+            "isEventTalked": [
+                true,
+                false,
+                false
+            ],
+            "isTopicTalked": [
+                [
+                    true,
+                    true,
+                    true,
+                    true,
+                    true
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ]
+            ],
+            "summarizing": false,
+            "ended": false
+        },
+        {
+            "dialogue_turn": 5,
+            "curEid": 0,
+            "switchingEvent": false,
+            "wandering": false,
+            "forwardProgress": 0,
+            "sumPending": false,
+            "evtPending": false,
+            "wanPending": false,
+            "hasSuggested": false,
+            "isEventTalked": [
+                true,
+                false,
+                false
+            ],
+            "isTopicTalked": [
+                [
+                    true,
+                    true,
+                    true,
+                    true,
+                    true
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ]
+            ],
+            "summarizing": false,
+            "ended": false
+        },
+        {
+            "dialogue_turn": 6,
+            "curEid": 0,
+            "switchingEvent": false,
+            "wandering": false,
+            "forwardProgress": 0,
+            "sumPending": false,
+            "evtPending": false,
+            "wanPending": false,
+            "hasSuggested": false,
+            "isEventTalked": [
+                true,
+                false,
+                false
+            ],
+            "isTopicTalked": [
+                [
+                    true,
+                    true,
+                    true,
+                    true,
+                    true
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ]
+            ],
+            "summarizing": false,
+            "ended": false
+        },
+        {
+            "dialogue_turn": 7,
+            "curEid": 0,
+            "switchingEvent": false,
+            "wandering": false,
+            "forwardProgress": 0,
+            "sumPending": false,
+            "evtPending": true,
+            "wanPending": false,
+            "hasSuggested": true,
+            "isEventTalked": [
+                true,
+                false,
+                false
+            ],
+            "isTopicTalked": [
+                [
+                    true,
+                    true,
+                    true,
+                    true,
+                    true
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ]
+            ],
+            "summarizing": false,
+            "ended": false
+        }
+    ],
+    "chat_history": [
+        {
+            "role": "assistant",
+            "content": "这是2022年12月18日,你婚礼上的照片，一共有7张。我把照片分成了三个场景，分别是: 你骑在马上接亲的场景，婚礼仪式现场，还有亲友大合影。我们从第一个场景聊起吧，第一个场景是骑马接亲。"
+        },
+        {
+            "role": "user",
+            "content": " 好呀"
+        },
+        {
+            "role": "assistant",
+            "content": "好的，因为这是第一次聊到骑马接亲的照片,我来整体向您介绍下。这是您照片中的第1个场景,一共有3张照片,记录了你骑马接亲的场景。那天天气晴朗，亲友成群。街道两旁有很多绿树，可以看出是很美好的一天。我的描述准确吗?你记得当时在做什么吗?"
+        },
+        {
+            "role": "user",
+            "content": " 我当时在骑马嘛 我是在怎么样的街上骑马的？"
+        },
+        {
+            "role": "assistant",
+            "content": "你提到了街道，我在照片里看到你骑着马在宽敞且有树木装饰的街道上。街道两侧有高楼和绿植。天气晴朗，阳光明媚，你身后有一队身穿红色传统服饰的人，似乎是在进行婚礼庆典。从照片中,我还注意到:照片中，你身穿红色唐装，上面有金龙图案；袜子也是红色的。你对这身衣服有印象吗?"
+        },
+        {
+            "role": "user",
+            "content": "金龙图案是什么样的？我身后一队人大概是多少人呢？他们排得整齐吗"
+        },
+        {
+            "role": "assistant",
+            "content": "B\n\n金龙图案采用金色为主色调，整体造型为传统的中国龙形象，表现为盘曲的身体和张牙舞爪的样子，给人以庄严和喜庆的感觉。你身后的一队人大致有十余人，他们穿着红色的传统服饰，排列得相对整齐，跟随你的骑马队伍，营造出喜庆的氛围。从照片中,我还注意到:照片中，你骑着马，身旁有许多亲友。队伍后面有一个红色的轿子。轿子前面有演出队伍，他们系着腰鼓、敲着铜锣。你还记得当时的活动吗?"
+        },
+        {
+            "role": "user",
+            "content": "  我记得锣鼓喧天 可大声了 红色轿子是有人抬着吗？"
+        },
+        {
+            "role": "assistant",
+            "content": "B\n是的，红色轿子是由几个人抬着。轿子装饰华丽，顶部有传统的宫灯和穗饰，人们穿着节日的红色服装，看起来非常喜庆。轿子周围有泡泡飘洒，增添了欢乐的气氛。从照片中,我还注意到:照片中还显示，你站在红色轿子旁边，掀起帘子。身旁充满五颜六色的泡泡。你记得当时的心情吗?"
+        },
+        {
+            "role": "user",
+            "content": " 怎么会有泡泡？是泡泡水吹出来的透明泡泡吗"
+        },
+        {
+            "role": "assistant",
+            "content": "B\n是的，图片中的泡泡看起来像是由泡泡水吹出来的透明泡泡，环绕在红色轿子周围，为场景增添了欢乐气氛。从照片中,我还注意到:照片中的马，胸前系着红色大花。骑马的感受如何？"
+        },
+        {
+            "role": "user",
+            "content": " 好高好吓人啊！还好马很温驯"
+        },
+        {
+            "role": "assistant",
+            "content": "好的，马看起来确实很温驯。从照片中,我还注意到:照片中，轿子两旁各有一个牌子，一个写着喜字，另一个写着迎亲。这个场景一定意义非凡"
+        },
+        {
+            "role": "user",
+            "content": " 可以详细描述一下这个牌子吗"
+        },
+        {
+            "role": "assistant",
+            "content": "B\n照片中的牌子是红底金字的传统风格，上方写着“喜”字，象征着喜庆和幸福。牌子下方还装饰有金色的流苏和花纹，体现了浓厚的节日氛围。关于骑马接亲场景，我们聊了很多了。你还有更多问题吗?没有的话, 我们可以聊下一个场景:婚礼仪式。"
+        }
+    ]
+}

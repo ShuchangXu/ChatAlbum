@@ -1,0 +1,210 @@
+{
+    "user": "dev_wmq",
+    "resume": null,
+    "datetime": "2024-02-19-16:07",
+    "photo_dir": "E:\\VScode\\workfolder\\vislab\\uist2024\\ChatAlbum\\Reviver_Proactive\\photos\\dev_wmq",
+    "mtree": {
+        "superE": "这是2022年12月18日,你婚礼上的照片，一共有7张。我把照片分成了三个场景，分别是: 你骑在马上接亲的场景，婚礼仪式现场，还有亲友大合影。",
+        "events": [
+            "一共有3张照片,记录了你骑马接亲的场景。那天天气晴朗，亲友成群。街道两旁有很多绿树，可以看出是很美好的一天。",
+            "一共有3张照片,记录了婚礼仪式的现场,分别有拜天地、拜父母，对拜等场景。整个环境是暖黄色调，背景墙上写着王、李、喜字。",
+            "一共有1张照片,是亲友的大合影，照片中有接近40个人。新郎新娘站在舞台中央，身边围满了亲友。亲友的着装，大多是红色、黑色、白色、蓝色。"
+        ],
+        "evtCnt": 3,
+        "evtStr": "1 骑马接亲; 2 婚礼仪式; 3 亲友合影",
+        "shorts": [
+            "骑马接亲",
+            "婚礼仪式",
+            "亲友合影"
+        ],
+        "photos": [
+            [
+                1,
+                2,
+                3
+            ],
+            [
+                4,
+                5,
+                6
+            ],
+            [
+                7
+            ]
+        ],
+        "topics": [
+            [
+                "照片中，你身穿红色唐装，上面有金龙图案；袜子也是红色的。你对这身衣服有印象吗?",
+                "照片中，你骑着马，身旁有许多亲友。队伍后面有一个红色的轿子。轿子前面有演出队伍，他们系着腰鼓、敲着铜锣。你还记得当时的活动吗?",
+                "照片中还显示，你站在红色轿子旁边，掀起帘子。身旁充满五颜六色的泡泡。你记得当时的心情吗?",
+                "照片中的马，胸前系着红色大花。骑马的感受如何？",
+                "照片中，轿子两旁各有一个牌子，一个写着喜字，另一个写着迎亲。这个场景一定意义非凡"
+            ],
+            [
+                "照片中,你穿着红色金龙唐装，新娘穿着红色金凤唐装。你们先是对着镜头，敬拜天地；然后面向长辈，敬拜长辈；最后夫妻对拜。当时的心情如何?",
+                "婚礼现场的布景也很新引人。背景墙上写有喜字，两旁是金色的竹子和红色的玫瑰花。聚光灯将你们的影子投射到背景墙上，整个色调是暖黄色的，非常温馨。这是在哪里?",
+                "照片中，舞台上坐着几位长辈。一位是穿着红色大衣的女士，一位是穿着黑色正装，佩戴着胸花，手捧红色盒子的男士。还有一位是穿着红色唐装的老年女士。你记得这个场景吗?"
+            ],
+            [
+                "合影的布景很好，前景是两捧红花，天花板上还有水晶吊灯。这时你的心情如何?",
+                "照片中,新郎新娘两侧各站着一位小朋友，都是小男孩，看上去不到十岁。你记得他们吗?",
+                "照片一共有3排人，前面第一排以女士为主，后面两排以男士为主。当时都有哪些亲友到场了?"
+            ]
+        ]
+    },
+    "reply_history": [
+        {
+            "dialogue_turn": 0,
+            "user_input": null,
+            "original_reply": "这是2022年12月18日,你婚礼上的照片，一共有7张。我把照片分成了三个场景，分别是: 你骑在马上接亲的场景，婚礼仪式现场，还有亲友大合影。我们从第一个场景聊起吧，第一个场景是骑马接亲。",
+            "corrected_reply": null
+        },
+        {
+            "dialogue_turn": 1,
+            "user_input": "  好呀 我在怎样的场地上骑马呢？",
+            "original_reply": "您在一个开阔的城市道路上骑马，道路的两旁有绿化带和高楼。马的身上和您的头上都装饰着红色的花饰，您身穿传统的红色中式婚服，显得喜庆而庄重。周围有穿着红色服装的随行人员，以及一些拿相机拍照的人群。整个场景洋溢着节日的氛围。因为这是第一次聊到骑马接亲的照片,我来整体向您介绍下。这是您照片中的第1个场景,一共有3张照片,记录了你骑马接亲的场景。那天天气晴朗，亲友成群。街道两旁有很多绿树，可以看出是很美好的一天。我的描述准确吗?你记得当时在做什么吗?",
+            "corrected_reply": null
+        },
+        {
+            "dialogue_turn": 2,
+            "user_input": " 不记得了",
+            "original_reply": "好的，在您提供的照片中，您身着红色的中式婚服，正骑在一匹装饰有红色花饰的马上。第三张图片可以看出有一队人在街道上跟随着您，都身穿鲜艳的红色服装，营造了热闹的婚庆氛围。最后一张图片中，您似乎到达了目的地，有人撒着五彩泡泡，街上的行人都在围观这一喜庆场景。从照片中,我还注意到:照片中，你身穿红色唐装，上面有金龙图案；袜子也是红色的。你对这身衣服有印象吗?",
+            "corrected_reply": null
+        }
+    ],
+    "state_history": [
+        {
+            "dialogue_turn": 0,
+            "curEid": 0,
+            "switchingEvent": true,
+            "wandering": false,
+            "forwardProgress": 0,
+            "sumPending": false,
+            "evtPending": false,
+            "wanPending": false,
+            "hasSuggested": false,
+            "isEventTalked": [
+                true,
+                false,
+                false
+            ],
+            "isTopicTalked": [
+                [
+                    true,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ]
+            ],
+            "summarizing": false,
+            "ended": false
+        },
+        {
+            "dialogue_turn": 1,
+            "curEid": 0,
+            "switchingEvent": false,
+            "wandering": false,
+            "forwardProgress": 0,
+            "sumPending": false,
+            "evtPending": false,
+            "wanPending": false,
+            "hasSuggested": false,
+            "isEventTalked": [
+                true,
+                false,
+                false
+            ],
+            "isTopicTalked": [
+                [
+                    true,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ]
+            ],
+            "summarizing": false,
+            "ended": false
+        },
+        {
+            "dialogue_turn": 2,
+            "curEid": 0,
+            "switchingEvent": false,
+            "wandering": false,
+            "forwardProgress": 0,
+            "sumPending": false,
+            "evtPending": false,
+            "wanPending": false,
+            "hasSuggested": false,
+            "isEventTalked": [
+                true,
+                false,
+                false
+            ],
+            "isTopicTalked": [
+                [
+                    true,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ]
+            ],
+            "summarizing": false,
+            "ended": false
+        }
+    ],
+    "chat_history": [
+        {
+            "role": "assistant",
+            "content": "这是2022年12月18日,你婚礼上的照片，一共有7张。我把照片分成了三个场景，分别是: 你骑在马上接亲的场景，婚礼仪式现场，还有亲友大合影。我们从第一个场景聊起吧，第一个场景是骑马接亲。"
+        },
+        {
+            "role": "user",
+            "content": "  好呀 我在怎样的场地上骑马呢？"
+        },
+        {
+            "role": "assistant",
+            "content": "您在一个开阔的城市道路上骑马，道路的两旁有绿化带和高楼。马的身上和您的头上都装饰着红色的花饰，您身穿传统的红色中式婚服，显得喜庆而庄重。周围有穿着红色服装的随行人员，以及一些拿相机拍照的人群。整个场景洋溢着节日的氛围。因为这是第一次聊到骑马接亲的照片,我来整体向您介绍下。这是您照片中的第1个场景,一共有3张照片,记录了你骑马接亲的场景。那天天气晴朗，亲友成群。街道两旁有很多绿树，可以看出是很美好的一天。我的描述准确吗?你记得当时在做什么吗?"
+        },
+        {
+            "role": "user",
+            "content": " 不记得了"
+        },
+        {
+            "role": "assistant",
+            "content": "好的，在您提供的照片中，您身着红色的中式婚服，正骑在一匹装饰有红色花饰的马上。第三张图片可以看出有一队人在街道上跟随着您，都身穿鲜艳的红色服装，营造了热闹的婚庆氛围。最后一张图片中，您似乎到达了目的地，有人撒着五彩泡泡，街上的行人都在围观这一喜庆场景。从照片中,我还注意到:照片中，你身穿红色唐装，上面有金龙图案；袜子也是红色的。你对这身衣服有印象吗?"
+        }
+    ]
+}

@@ -9,6 +9,7 @@ Reviver_Proactive/photos
 Reviver_Proactive/__pycache__
 Reviver/__pycache__
 baseline/.env
+baseline/photos/
 baseline/.DS_Store
 baseline/photos_raw
 baseline/__pycache__

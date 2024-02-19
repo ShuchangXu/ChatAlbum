@@ -52,7 +52,7 @@ if __name__=="__main__":
     while True:
         try:
             user_input = get_input()
-            if user_input == "quit":
+            if user_input.replace(" ", "") == "quit":
                 reviver.save_chat_history()
                 break
             

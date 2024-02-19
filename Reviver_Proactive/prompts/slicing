@@ -1,0 +1,55 @@
+____ Input Format ____
+You will be provided with a list of photos.
+Each photo is described by a json. This is one example of the json (the meaning of each key is provided after //):
+{
+    "id": 1,// the id of the photo
+    "u": true, // whether the user is in the photo
+    "act": "你和一只狗玩耍。这只狗很可能是柯基",// the activity in the photo
+    "set": "环境在室外，黄昏时分阳光透过建筑物散发出暖黄色的光线。", // the setting of the photo
+    "obj": [
+        "天空是橘黄色逐渐过渡到深蓝色的，此时太阳已经接近地平线",
+        "有几株柳树，树枝垂挂，绿色的叶子在天空的衬托下呈现出轮廓",
+        "湖面平静，倒映着天空与树木的轮廓",
+        "前景有一排栏杆，颜色是深灰色",
+        "背景中有建筑物的轮廓，可以略见窗户的细节，颜色偏深"
+    ] // a list of key objects in the photo
+}
+
+____ Task ____
+Your task is to slice the sequence into several events. Each event contains one to several adjacent photos.
+Please think in the following steps:
+
+[Step 1]
+Please briefly compare each two adjacent photos, and rate their similarity.
+
+(a) Comparison ("com"): Please briefly state the similarity abd differences of the two photos. You can focus on the settings and the key objects.
+
+(b) Similarity Rating ("sim"): Please rate from 0 to 3. The standard is as follows:
+    3: Very similar. This means the setting of the photos are very similar, and the two photos share many similar key objects. The user and activity can be slightly different.
+    2: Slightly similar. This means the setting of the photos are similar, but the two photos only share a few key objects.
+    1: Slightly different. This means the setting of the photos are only slightly similar, although the two photos share a few key objects.
+    0: Very different. This means the setting of the photos are quite different, or the two photos share few key objects.
+
+[Step 2]
+Based on the similarity rating, please slice the photo sequences into several events, and give a brief title of each event.
+Please add a slice between two photos if their similarity rating is 1 or 0. Otherwise do not slice.
+
+____ Output ____
+Output Example:
+{
+    "slices":{
+        "1": // The event id
+        {
+            "tit":"夕阳海景",//the title of the evnet
+            "ib":1,//the id of the first photo in this event
+            "ie":5,//the id of the last photo in this event
+        },
+        "2":{...}
+        ...
+    }
+}
+
+Output should be formatted as a JSON file in Simplified Chinese.
+Please directly output the JSON. Do not add any additional words.
+
+____ Input: Photo Sequence ____

@@ -51,7 +51,7 @@ class Photo_PreProcessor:
                 "ptexts": []
             }
         else:
-            self.m_tree = json.loads(open(os.path.join(self.json_dir, old_mtree_file), 'r', encoding='utf-8').read())
+            self.mtree = json.loads(open(os.path.join(self.json_dir, old_mtree_file), 'r', encoding='utf-8').read())
         
         self.single_photo_prompt = open(os.path.join(SCRIPT_DIR, "prompts", "single_photo_extraction"), 'r', encoding='utf-8').read()
         self.slicing_prompt = open(os.path.join(SCRIPT_DIR, "prompts", "slicing"), 'r', encoding='utf-8').read()
@@ -122,6 +122,7 @@ class Photo_PreProcessor:
             meta_data = self.meta_data_list[pid]
 
         reply_dict = self.vqa(self.single_photo_prompt, pid, meta_data)
+        reply_dict["id"] = pid
 
         return reply_dict
     
@@ -137,19 +138,21 @@ class Photo_PreProcessor:
 
     #     reply_string = self.call_llm(content)
 
-    #     idx_bgn_list = [int(e) if e.isdigit() else e for e in reply_string.split(',')]
-    #     idx_end_list = [for e in idx_bgn_list][1:]
-    #     idx_end_list.append(len(self.mtree['ptexts']))
+    #     print(reply_string)
+
+    #     # idx_bgn_list = [int(e) if e.isdigit() else e for e in reply_string.split(',')]
+    #     # idx_end_list = [for e in idx_bgn_list][1:]
+    #     # idx_end_list.append(len(self.mtree['ptexts']))
 
 
 
-    #     return reply_dict
+    #     return reply_string
 
         
     
-    # def build_m_tree(self, ):
-    #     events = []
-    #     shorts = []
-    #     photos = []
-    #     topics = []
-    #     return 
+    def build_m_tree(self, ):
+        events = []
+        shorts = []
+        photos = []
+        topics = []
+        return 

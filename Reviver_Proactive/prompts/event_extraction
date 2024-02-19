@@ -1,0 +1,25 @@
+Your task is to slice the sequences into several events.
+
+Please think step by step:
+
+Step one:
+
+
+
+Output should be formatted as a JSON file in Simplified Chinese. Please directly output the JSON. Do not add any additional words.
+
+人物 + 活动:
+
+
+Output Example:
+{
+    "event": "一共有4张照片,记录了你在公路上骑马的场景。那天天气晴朗，街道两旁有很多绿树。照片中主要有你、人群、轿子等内容。",
+    "short": "在公路上骑马",
+    "topics": [
+        "照片中，你骑着马，马的胸前系着红色大花。马的身旁有许多人，他们大多穿着红色服装。在你们后面是演出队伍，他们系着腰鼓、敲着铜锣。随后是一个红色的轿子。轿子两旁各有一个牌子，一个写着喜字，另一个写着迎亲。你能描述下当时的活动吗?"
+        "照片中，你站在红色轿子旁边，掀起帘子。身旁充满五颜六色的泡泡。"
+        "照片主要是公路上的室外场景，你记得当时的具体地点吗?"
+        "照片中，天气晴朗。你身穿红色唐装，上面有金龙图案；袜子也是红色的。你的表情是微笑的。你的感受如何?"
+        "照片中，街道旁还有环卫工人，街道上有护栏。"
+    ]
+}

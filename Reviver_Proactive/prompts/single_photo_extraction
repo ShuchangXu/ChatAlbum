@@ -1,10 +1,10 @@
-The first photo is the user's portrait.
+The first photo is a collage of the user's portraits.
 The second photo is the photo you are trying to extract information from.
 The meta-data of the second photo is provided in text (it could be empty, i.e., "").
 
 Please extract the following items based on the second photo and its metadata:
 
-[1] You ("u"): Determine whether the user is in the photo. Please use the user's portrait to recognize him or her.
+[1] You ("u"): Determine whether the user is in the photo. Please use the user's portraits in the first photo to recognize him or her.
 
 [2] Who_What ("act"):
     If the user is in the photo, describe what the user is doing (e.g., "You were playing with a dog on the sofa.").

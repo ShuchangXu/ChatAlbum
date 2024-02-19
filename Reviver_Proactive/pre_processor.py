@@ -110,7 +110,7 @@ class Photo_PreProcessor:
         ]
 
         reply_string = self.call_llm(content)
-        console_log(reply_string)
+        print(reply_string+",")
 
         reply_dict = json_parser(reply_string)
 
@@ -126,7 +126,6 @@ class Photo_PreProcessor:
         return reply_dict
     
     def batch_photo_extraction(self, pid_bgn, p_cnt):
-        self.mtree["ptexts"] = []
         for pid in range(pid_bgn, pid_bgn + p_cnt):
             ptext = self.single_photo_extraction(pid)
             self.mtree["ptexts"].append(ptext)

@@ -3,6 +3,8 @@ import os
 import json
 import base64
 
+import numpy as np
+
 from openai import OpenAI
 
 MAX_TOKENS = 1000
@@ -55,6 +57,7 @@ class Photo_PreProcessor:
         
         self.single_photo_prompt = open(os.path.join(SCRIPT_DIR, "prompts", "single_photo_extraction"), 'r', encoding='utf-8').read()
         self.slicing_prompt = open(os.path.join(SCRIPT_DIR, "prompts", "slicing"), 'r', encoding='utf-8').read()
+        self.event_prompt = open(os.path.join(SCRIPT_DIR, "prompts", "event_extraction"), 'r', encoding='utf-8').read()
     
     def save_m_tree(self, save_path=None): 
         if not save_path:
@@ -148,11 +151,41 @@ class Photo_PreProcessor:
 
     #     return reply_string
 
-        
+    def event_extraction(self, cur_ptexts):
+        content = []
+        task = self.event_prompt + cur_ptexts
+        content.append({"role": "user", "content": task})
+
+        reply_string = self.call_llm(content)
+        print(reply_string)
+
+        reply_dict = json_parser(reply_string)
+        return reply_dict
     
-    def build_m_tree(self, ):
+    def build_m_tree(self, slice_locs):
+        photos = []
         events = []
         shorts = []
-        photos = []
         topics = []
-        return 
+
+        for i in range(len(slice_locs) - 1):
+            pid_list = np.arange(slice_locs[i], slice_locs[i+1], 1, dtype=int).tolist()
+
+            cur_ptexts = ""
+            for id in pid_list:
+                ptext = json.dumps(self.mtree["ptexts"][id - 1], ensure_ascii=False, indent=4)
+                cur_ptexts += ptext
+            
+            event_dict = self.event_extraction(cur_ptexts)
+
+            photos.append(pid_list)
+            events.append(event_dict["event"])
+            shorts.append(event_dict["short"])
+            topics.append(event_dict["topics"])
+                
+        self.mtree["photos"]=photos
+        self.mtree["events"]=events
+        self.mtree["shorts"]=shorts
+        self.mtree["topics"]=topics
+
+        self.save_m_tree()

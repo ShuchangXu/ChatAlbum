@@ -1,25 +1,50 @@
-Your task is to slice the sequences into several events.
+Your are provided with descriptions of photos related to one event. Your task is to provide an overview and topics related to this event.
 
-Please think step by step:
+__Input Format__
+Each photo is described by a json. This is one example of the json (the meaning of each key is provided after //):
+{
+    "id": 1,// the id of the photo
+    "u": true, // whether the user is in the photo
+    "act": "你和一只狗玩耍。这只狗很可能是柯基",// the activity in the photo
+    "set": "环境在室外，黄昏时分阳光透过建筑物散发出暖黄色的光线。", // the setting of the photo
+    "obj": [
+        "天空是橘黄色逐渐过渡到深蓝色的，此时太阳已经接近地平线",
+        "有几株柳树，树枝垂挂，绿色的叶子在天空的衬托下呈现出轮廓",
+        "湖面平静，倒映着天空与树木的轮廓",
+        "前景有一排栏杆，颜色是深灰色",
+        "背景中有建筑物的轮廓，可以略见窗户的细节，颜色偏深"
+    ] // a list of key objects in the photo
+}
 
-Step one:
+
+__Task__
+You need to generate the following information, based on the guidelines:
+"event": a summary of the event, organized by this structure: "一共有N张照片，记录了(主体+活动，参考"act")的场景。这个场景的(环境如何, 参考"set")。照片中主要有(主要内容,参考"obj")"
+"short": a short title of the event, containing the key information of "act" and "set".
+"topics": a list of topics you can discuss about these photos. Each topic contains a statement and a follow-up question.
+    The topics can fall into the following aspects, with the structure of these topics specified as follows:
+    - feeling: A detailed description of the user's clothes and activity, followed by a question: "你的心情如何?"
+    - people (if there are people in the photos): a detailed description of their apperances and activities. followed by a question: "你记得都有谁吗?"
+    - activity: a detailed description of the activities, followed by a question: "你记得在做什么吗?"
+    - place: A detailed description of the setting, followed by a question: "你记得这个地方吗?"
+    - objects: A list of objects in these scenes.
+
+    
+    Please make sure the topics do not have repetitive information. Make sure 
 
 
-
+__Output Format__
 Output should be formatted as a JSON file in Simplified Chinese. Please directly output the JSON. Do not add any additional words.
-
-人物 + 活动:
-
 
 Output Example:
 {
-    "event": "一共有4张照片,记录了你在公路上骑马的场景。那天天气晴朗，街道两旁有很多绿树。照片中主要有你、人群、轿子等内容。",
+    "event": "一共有4张照片,记录了你在公路上骑马的场景。那天天气晴朗，街道两旁有很多绿树。照片中主要有你和马、人群、轿子等。",
     "short": "在公路上骑马",
     "topics": [
-        "照片中，你骑着马，马的胸前系着红色大花。马的身旁有许多人，他们大多穿着红色服装。在你们后面是演出队伍，他们系着腰鼓、敲着铜锣。随后是一个红色的轿子。轿子两旁各有一个牌子，一个写着喜字，另一个写着迎亲。你能描述下当时的活动吗?"
-        "照片中，你站在红色轿子旁边，掀起帘子。身旁充满五颜六色的泡泡。"
-        "照片主要是公路上的室外场景，你记得当时的具体地点吗?"
-        "照片中，天气晴朗。你身穿红色唐装，上面有金龙图案；袜子也是红色的。你的表情是微笑的。你的感受如何?"
+        "照片中，你骑着马，马的胸前系着红色大花。马的身旁有许多人，他们大多穿着红色服装。他们可能是谁?"
+        "照片中，你站在红色轿子旁边，掀起帘子。身旁充满五颜六色的泡泡。在你们后面是演出队伍，他们系着腰鼓、敲着铜锣。随后是一个红色的轿子。轿子两旁各有一个牌子，一个写着喜字，另一个写着迎亲。"
+        "照片主要是公路上的室外场景，你记得这个地方吗?"
+        "照片中，天气晴朗。你身穿红色唐装，上面有金龙图案；袜子也是红色的。?"
         "照片中，街道旁还有环卫工人，街道上有护栏。"
     ]
 }

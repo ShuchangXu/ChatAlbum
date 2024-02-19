@@ -68,6 +68,7 @@ class ReviverPro:
 
             # ________ These variables tracked the progress ________
             self.curEid = 0
+            self.commandEid = None
             # self.original_eid = None
             # self.corrected_eid = None
 
@@ -104,6 +105,7 @@ class ReviverPro:
                 "resume": None,
                 "datetime": datetime.now().strftime("%Y-%m-%d-%H:%M"),
                 "photo_dir": self.photo_dir,
+                "chat_history": [],
                 "mtree": {                    
                     "superE": self.superE,
                     "events": self.events,
@@ -145,6 +147,7 @@ class ReviverPro:
             # self.corrected_eid = latest_state_history["corrected_eid"]
             
             self.curEid = latest_state_history["curEid"]
+            self.commandEid = latest_state_history["commandEid"]
             self.switchingEvent = latest_state_history["switchingEvent"]
             
             self.wandering = latest_state_history["wandering"]
@@ -228,6 +231,7 @@ class ReviverPro:
         self.log["reply_history"].append({
             "dialogue_turn": self.dialogue_turn,
             "user_input": user_input,
+            "command_eid": self.commandEid,
             "original_reply": original_reply,
             "corrected_reply": corrected_reply
         })
@@ -238,6 +242,7 @@ class ReviverPro:
             # "corrected_eid": self.corrected_eid,
             
             "curEid": self.curEid,
+            "commandEid": self.commandEid,
             "switchingEvent": self.switchingEvent,
             
             "wandering": self.wandering,
@@ -477,6 +482,7 @@ class ReviverPro:
         # reply = self.call_llm(content)
 
         reply = input("eid:").replace(" ", "")
+        self.commandEid = reply
 
         # corrected_reply = human_check_reply(reply, "event prediction")
 
@@ -606,6 +612,7 @@ class ReviverPro:
 
     
     def chat(self, user_input):
+        self.commandEid = None
         # self.original_eid, self.corrected_eid = None, None
 
         if self.ended:
@@ -618,7 +625,6 @@ class ReviverPro:
             else:
                 reply = self.replier(user_input) + self.inspirer()
 
-            self.switchingEvent = False
         
         corrected_reply = human_check_reply(reply) # None if original reply is accepted
         self.record_current_dialogue_turn(user_input, reply, corrected_reply)
@@ -627,5 +633,7 @@ class ReviverPro:
 
         self.chat_history.append({"role": "user", "content": user_input})
         self.chat_history.append({"role": "assistant", "content": reply})
+        
+        self.switchingEvent = False
 
         return reply

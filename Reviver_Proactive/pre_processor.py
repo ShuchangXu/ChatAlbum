@@ -68,14 +68,27 @@ class Photo_PreProcessor:
         print("mtree已保存至", save_path)
     
     def call_llm(self, content, max_tokens = MAX_TOKENS, model="gpt-4-vision-preview"):
-        response = self.client.chat.completions.create(
-            messages = content,
-            model = model,
-            max_tokens = max_tokens
-        )
-
-        reply = response.choices[0].message.content
-        return reply
+        attempt_times = 3
+        attempt_count = 0
+        
+        while attempt_count < attempt_times:
+            attempt_count += 1
+            try:                
+                response = self.client.chat.completions.create(
+                    messages = content,
+                    model = model,
+                    max_tokens = max_tokens
+                )
+                reply = response.choices[0].message.content
+                return reply
+            except Exception as e:
+                print(e)
+                if attempt_count < attempt_times:
+                    input("Error occurs! Please press \"Enter\" to retry ({}/{}):".format(attempt_count, attempt_times))
+                else:                
+                    print("Error occurs! Program will exit ({}/{}).".format(attempt_count, attempt_times))
+        exit()
+        
     
     def encode_image(self, image_path):
         with open(image_path, "rb") as image_file:

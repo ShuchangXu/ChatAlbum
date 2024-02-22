@@ -5,6 +5,8 @@ from voice_interface import Recorder, Polly
 from reviver_pro_v2 import ReviverPro
 from dotenv import load_dotenv
 
+user = "zhy_1"
+resume = None
 
 USE_VUI = True
 recorder = Recorder()
@@ -39,8 +41,6 @@ if __name__=="__main__":
     load_dotenv()
     api_key=os.getenv("GPT_API_KEY")
     
-    user = "lmq_1"
-    resume = None
     reviver = ReviverPro(api_key, user, resume)
 
     if not resume:

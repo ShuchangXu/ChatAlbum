@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 from openai import OpenAI
 
 MAX_TOKENS = 1000
-MAX_ATTEMPTS = 3
 TIME_OUT = 30
 MODEL = "gpt-4-vision-preview"
 
@@ -34,8 +33,11 @@ class Photo_PreProcessor:
         
         
     def photo_captioning(self, photo_path, user_photo_path):
-        print(photo_path)
-        current_content = []        
+        # print(photo_path)
+        current_content = [{
+            "type": "text",
+            "text": "请注意，第一张照片是我，仅作为人脸的参考，第二张照片才是你需要描述的图片。切勿描述第二张照片之外的内容，切勿出现第几张照片等字眼。",
+        }]        
         
         base64_user = self.encode_image(user_photo_path)
         current_content.append({
@@ -54,14 +56,29 @@ class Photo_PreProcessor:
             })
             
         self.content[-1]["content"] = current_content
-        response = self.client.chat.completions.create(
-                    model = self.model,
-                    max_tokens = self.max_tokens,
-                    messages = self.content
-        )
         
-        reply = response.choices[0].message.content 
-        print(reply)
+        attempt_times = 3
+        attempt_count = 0
+        
+        while attempt_count < attempt_times:
+            attempt_count += 1
+            response = self.client.chat.completions.create(
+                        model = self.model,
+                        max_tokens = self.max_tokens,
+                        messages = self.content
+            )
+            
+            reply = response.choices[0].message.content 
+            print(reply)
+            
+            if "第一张" in reply or "第二张" in reply:
+                if attempt_count < attempt_times:
+                    print("Photo caption有误，将再次尝试({}/{})".format(attempt_count, attempt_times))
+                else:
+                    print("Photo caption有误，请手动修正({}/{})".format(attempt_count, attempt_times))
+            else:
+                break
+        
         # print("请求用时:", "{}s".format(round(end_time - start_time, 3)))
         # print("GPT回复:", reply)
         # print("==================")
@@ -89,18 +106,26 @@ if __name__ == "__main__":
     photo_names = os.listdir(photo_dir)
     descriptions = []
     
+    start_from = 1 #从第一张图片开始
+    
     user_photo_path = os.path.join(photo_dir, photo_names[-1])
-    photo_names = sorted(photo_names[:-1], key=lambda x: int(x.split('.')[0]))
+    photo_names = sorted(photo_names[(start_from - 1):-1], key=lambda x: int(x.split('.')[0]))
     
     
     for photo_name in photo_names:
+        print(photo_name)
         photo_path = os.path.join(photo_dir, photo_name)
-        description = Processor.photo_captioning(photo_path, user_photo_path)
-        descriptions.append(description)
-    
-    print(descriptions)
+        try:
+            description = Processor.photo_captioning(photo_path, user_photo_path)
+            descriptions.append(description)
+        except Exception as e:
+            print(e)
+            print("{}识别失败，程序将退出，请手动修改start_from，从该张图片起重新操作。重新操作前务必保存此前图片描述文档至其他名称文件中。")
+            break
+            
     
     with open(os.path.join(SCRIPT_DIR, "descriptions", "{}.txt".format(user)), "w", encoding='utf-8') as f:
         for i, description in enumerate(descriptions):
             f.write("{}\t{}\n".format(i+1, description))
+        
     

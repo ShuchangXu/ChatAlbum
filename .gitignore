@@ -7,9 +7,14 @@ Reviver_Proactive/speech
 Reviver_Proactive/transcript
 Reviver_Proactive/photos
 Reviver_Proactive/__pycache__
+Reviver_Proactive/album_slic*
 Reviver/__pycache__
 baseline/.env
 baseline/photos/
 baseline/.DS_Store
 baseline/photos_raw
 baseline/__pycache__
+
+Baseline_Final/.env
+Baseline_Final/photos/
+Baseline_Final/__pycache__

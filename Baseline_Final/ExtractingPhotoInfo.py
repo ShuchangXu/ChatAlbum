@@ -98,6 +98,7 @@ class Photo_PreProcessor:
 if __name__ == "__main__":
     load_dotenv()
     api_key=os.getenv("OPENAI_API_KEY")
+    event_extraction_guide = open("./prompts/photo_event_guide", 'r', encoding='utf-8').read()
     des_extraction_guide = open("./prompts/photo_des_guide", 'r', encoding='utf-8').read()
     Processor = Photo_PreProcessor(api_key, MODEL, MAX_TOKENS, "dev3", des_extraction_guide)
 

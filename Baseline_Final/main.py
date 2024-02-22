@@ -6,7 +6,7 @@ from baseline_final import BaselineFinal
 from dotenv import load_dotenv
 
 user = "zhy_2"
-resume = "zhy_2_20240222_2.log"
+resume = None#"zhy_2_20240222_2.log"
 
 USE_VUI = True
 recorder = Recorder()

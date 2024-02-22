@@ -126,7 +126,6 @@ class BaselineFinal:
     #
     # ________________________ Replier ________________________
 
-    # # check whether the user has more questions    
     def replier(self, user_input):
         content = [{"role": "system", "content": self.system_guide},
                    {"role": "user", "content": self.description}]

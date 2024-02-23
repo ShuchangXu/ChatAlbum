@@ -211,16 +211,26 @@ class ReviverPro:
     #
     # ________________________ Helper Functions ________________________
     def call_llm(self, content, max_tokens = 200, model="gpt-4-vision-preview"):
-        response = self.client.chat.completions.create(
-            messages = content,
-            model = model,
-            max_tokens = max_tokens
-        )
-
-        reply = response.choices[0].message.content
-
-        # reply="\ncalling LLM:{}\n".format(content)
-        return reply
+        attempt_times = 3
+        attempt_count = 0
+        
+        while attempt_count < attempt_times:
+            attempt_count += 1
+            try:                
+                response = self.client.chat.completions.create(
+                    messages = content,
+                    model = model,
+                    max_tokens = max_tokens
+                )
+                reply = response.choices[0].message.content
+                return reply
+            except Exception as e:
+                print(e)
+                if attempt_count < attempt_times:
+                    input("Error occurs! Please press \"Enter\" to retry ({}/{}):".format(attempt_count, attempt_times))
+                else:                
+                    print("Error occurs! Program will exit ({}/{}).".format(attempt_count, attempt_times))
+        exit()
     
     def encode_image(self, image_path):
         with open(image_path, "rb") as image_file:
@@ -361,24 +371,37 @@ class ReviverPro:
     #
     # ________________________ Inspirer ________________________
         
-    # def topic_to_discuss(self):
-    #     candidates = ""
-    #     topics = self.topics[self.curEid]
-    #     talked = self.isTopicTalked[self.curEid]
-
-    #     for i in range(len(talked)):
-    #         if not talked[i]:
-    #             candidates += str(i) + " " + topics[i] + "\n"
-    #     return candidates
-    
-    def get_one_topic(self):
+    def topic_to_discuss(self):
+        candidates = ""
         topics = self.topics[self.curEid]
         talked = self.isTopicTalked[self.curEid]
 
         for i in range(len(talked)):
             if not talked[i]:
-                return i
-        return None
+                candidates += str(i) + " " + topics[i] + "\n"
+        return candidates
+    
+    def get_one_topic(self, directNext = False):
+        if directNext:
+            talked = self.isTopicTalked[self.curEid]
+
+            for i in range(len(talked)):
+                if not talked[i]:
+                    console_log("抛出新的话题，编号:{}".format(i))
+                    return i
+            return None
+        
+        else:
+            console_log("Follow-up Topics (E for next, null for none):"+self.topic_to_discuss())
+            tid_str = input("tid:").replace(" ", "")
+            if tid_str == "":
+                return None
+            elif tid_str == "E":
+                return "E"
+            else:
+                return int(tid_str)
+
+        
     
     def event_intro(self):
         reply = "因为这是第一次聊到{}的照片,我来整体向您介绍下。这是您照片中的第{}个场景,".format(self.shorts[self.curEid], str(self.curEid+1))
@@ -391,12 +414,16 @@ class ReviverPro:
 
     def sug_new_topic(self):
         tid = self.get_one_topic()
-        reply = "从照片中,我还注意到:" + self.topics[self.curEid][tid]
 
-        console_log("抛出新的话题，编号:{}".format(tid))
-        self.isTopicTalked[self.curEid][tid] = True # 标记该话题已被讨论
+        if tid is None:
+            return ""
+        elif tid is "E":
+            return self.sug_next()
+        else:
+            reply = "从照片中,我还注意到:" + self.topics[self.curEid][tid]
+            self.isTopicTalked[self.curEid][tid] = True # 标记该话题已被讨论
 
-        return reply
+            return reply
     
     def sug_summary(self):
         reply = "关于{}场景，我们聊了很多了。你还有更多问题吗?没有的话, 我会为您生成一段文字回忆录。".format(self.shorts[self.curEid])
@@ -420,19 +447,9 @@ class ReviverPro:
         self.hasSuggested = True
 
         return reply
-
-    def inspirer(self):
-        inspiration = ""
-        
-        if self.isEventTalked[self.curEid] == False:# if first time talk, event intro
-            inspiration += self.event_intro()
-        elif self.get_one_topic() is not None:# if there are some topics left, then bring up new topics
-            if self.switchingEvent:
-                inspiration += "我们继续讨论{}的照片.".format(self.shorts[self.curEid])
-            inspiration += self.sug_new_topic()
-        # elif self.hasSuggested: # if suggested then
-        #     inspiration += "关于{}您还有其他想了解的吗?"
-        elif self.wandering:# if wandering, then go back
+    
+    def sug_next(self):
+        if self.wandering:# if wandering, then go back
             inspiration = self.sug_end_wander()
         
         elif self.curEid == self.evtCnt - 1:# if no more topics, then suggest generating a summary
@@ -440,6 +457,21 @@ class ReviverPro:
         
         else:# if there is at least one new topic, then suggest moving on to the next topic
             inspiration = self.sug_next_event()
+        return inspiration
+
+    def inspirer(self):
+        inspiration = ""
+        
+        if self.isEventTalked[self.curEid] == False:# if first time talk, event intro
+            inspiration += self.event_intro()
+        elif self.topic_to_discuss() is not "":# if there are some topics left, then bring up new topics
+            # if self.switchingEvent:
+            #     inspiration += "我们继续讨论{}的照片.".format(self.shorts[self.curEid])
+            inspiration += self.sug_new_topic()
+        # elif self.hasSuggested: # if suggested then
+        #     inspiration += "关于{}您还有其他想了解的吗?"
+        else:
+            inspiration += self.sug_next()
 
         return inspiration
     
@@ -623,8 +655,11 @@ class ReviverPro:
             if self.summarizing:
                 reply = self.generate_summary(user_input)
             else:
-                reply = self.replier(user_input) + self.inspirer()
-
+                plain_reply = self.replier(user_input)
+                console_log("Plain_Reply:"+plain_reply)
+                inspiration = self.inspirer()
+                console_log("Inspiration:"+inspiration)
+                reply = plain_reply + inspiration
         
         corrected_reply = human_check_reply(reply) # None if original reply is accepted
         self.record_current_dialogue_turn(user_input, reply, corrected_reply)

@@ -46,6 +46,7 @@ class Photo_PreProcessor:
         if old_mtree_file is None:
             self.mtree = {
                 "super_event":"",
+                "evtStr": "",
                 "events": [],
                 "shorts": [],
                 "photos": [],

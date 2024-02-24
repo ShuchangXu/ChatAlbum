@@ -97,7 +97,7 @@ class Photo_PreProcessor:
 if __name__ == "__main__":
     load_dotenv()
     api_key=os.getenv("GPT_API_KEY")
-    user = "zhy_2"
+    user = "cw_2"
     
     des_extraction_guide = open(os.path.join(SCRIPT_DIR, "prompts", "photo_des_guide"), 'r', encoding='utf-8').read()
     Processor = Photo_PreProcessor(api_key, MODEL, MAX_TOKENS, user, des_extraction_guide)
@@ -107,9 +107,10 @@ if __name__ == "__main__":
     descriptions = []
     
     start_from = 1 #从第一张图片开始
-    
-    user_photo_path = os.path.join(photo_dir, photo_names[-1])
-    photo_names = sorted(photo_names[(start_from - 1):-1], key=lambda x: int(x.split('.')[0]))
+        
+    user_photo_path = os.path.join(photo_dir, '_.jpeg')    
+    photo_names = sorted([name for name in photo_names if "_" not in name], key=lambda x: int(x.split('.')[0]))
+    photo_names = photo_names[start_from-1:]
     
     
     for photo_name in photo_names:

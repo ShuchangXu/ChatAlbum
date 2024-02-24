@@ -417,7 +417,7 @@ class ReviverPro:
 
         if tid is None:
             return ""
-        elif tid is "E":
+        elif tid == "E":
             return self.sug_next()
         else:
             reply = "从照片中,我还注意到:" + self.topics[self.curEid][tid]
@@ -464,7 +464,7 @@ class ReviverPro:
         
         if self.isEventTalked[self.curEid] == False:# if first time talk, event intro
             inspiration += self.event_intro()
-        elif self.topic_to_discuss() is not "":# if there are some topics left, then bring up new topics
+        elif self.topic_to_discuss() != "":# if there are some topics left, then bring up new topics
             # if self.switchingEvent:
             #     inspiration += "我们继续讨论{}的照片.".format(self.shorts[self.curEid])
             inspiration += self.sug_new_topic()

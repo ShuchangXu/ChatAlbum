@@ -129,6 +129,10 @@
 
 ## 后续访谈
 
+用一句话描述体验，给一些中立思考的时间，再进入
+
+
+
 - **Comparison (advantages & disadvantages)**
   - Memory Reviver vs. the Baseline
   - Compared to Current Practices

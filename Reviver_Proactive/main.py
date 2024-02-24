@@ -5,7 +5,7 @@ from voice_interface import Recorder, Polly
 from reviver_pro_v2 import ReviverPro
 from dotenv import load_dotenv
 
-user = "zhy_1"
+user = "lmq_2"
 resume = None
 
 USE_VUI = True

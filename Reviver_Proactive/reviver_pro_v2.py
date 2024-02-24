@@ -513,6 +513,7 @@ class ReviverPro:
         
         # reply = self.call_llm(content)
 
+        console_log("event list:"+self.evtStr)
         reply = input("eid:").replace(" ", "")
         self.commandEid = reply
 

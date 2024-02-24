@@ -180,6 +180,7 @@ class Photo_PreProcessor:
         events = []
         shorts = []
         topics = []
+        evtStr = ""
 
         for i in range(len(slice_locs) - 1):
             pid_list = np.arange(slice_locs[i], slice_locs[i+1], 1, dtype=int).tolist()
@@ -195,10 +196,12 @@ class Photo_PreProcessor:
             events.append(event_dict["event"])
             shorts.append(event_dict["short"])
             topics.append(event_dict["topics"])
+            evtStr += str(i) + " " + event_dict["short"] + "\n"
                 
         self.mtree["photos"]=photos
         self.mtree["events"]=events
         self.mtree["shorts"]=shorts
         self.mtree["topics"]=topics
+        self.mtree["evtStr"]=evtStr
 
         self.save_m_tree()

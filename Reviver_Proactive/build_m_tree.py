@@ -13,5 +13,5 @@ if __name__ == "__main__":
 
     # Processor.slice()
 
-    slice_locs = [1,5,11,18,21,23,27,35,36,41,50,54]
+    slice_locs = [1,5,11,18,21,23,27,36,41,50,54]
     Processor.build_m_tree(slice_locs)

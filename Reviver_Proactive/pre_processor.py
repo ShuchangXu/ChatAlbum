@@ -135,7 +135,7 @@ class Photo_PreProcessor:
     def single_photo_extraction(self, pid):
         meta_data = ""
         if self.meta_data_list is not None:
-            meta_data = self.meta_data_list[pid]
+            meta_data = self.meta_data_list[pid-1]
 
         reply_dict = self.vqa(self.single_photo_prompt, pid, meta_data)
         reply_dict["id"] = pid

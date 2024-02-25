@@ -6,9 +6,9 @@ from reviver_pro_v2 import ReviverPro
 from dotenv import load_dotenv
 
 user = "cw_1"
-resume = None
+resume = "cw_1_20240225_4.log"
 
-USE_VUI = False
+USE_VUI = True
 recorder = Recorder()
 polly = Polly()
 

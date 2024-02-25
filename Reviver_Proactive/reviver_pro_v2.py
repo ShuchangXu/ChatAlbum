@@ -407,9 +407,9 @@ class ReviverPro:
         
     
     def event_intro(self):
-        reply = "因为这是第一次聊到{}的照片,我来整体向您介绍下。这是您照片中的第{}个场景,".format(self.shorts[self.curEid], str(self.curEid+1))
+        reply = "您照片中的第{}个场景是{}。".format(str(self.curEid+1), self.shorts[self.curEid])
         reply += self.events[self.curEid]
-        reply += "我的描述准确吗?你记得当时在做什么吗?"
+        reply += "我的描述准确吗?"
 
         self.isEventTalked[self.curEid] = True
 

@@ -322,6 +322,9 @@ class ReviverPro:
     #     return reply=="Y"
     
     def replier(self, user_input):
+        vqa_or_not = input("N for Not VQA:\n")
+        if vqa_or_not == "N":
+            return ""
         content = []
         content.extend(self.chat_history[(-6 if len(self.chat_history)>=6 else 0):])
 

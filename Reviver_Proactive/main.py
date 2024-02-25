@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 user = "lmq_2"
 resume = None
 
-USE_VUI = True
+USE_VUI = False
 recorder = Recorder()
 polly = Polly()
 

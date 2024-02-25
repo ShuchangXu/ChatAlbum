@@ -15,12 +15,12 @@ polly = Polly()
 
 def agent_reply(reply):
     print("\nAgent:"+reply)
-    if USE_VUI:
-        try:
-            # Text-to-speech
-            polly.synthesize(reply)
-        except Exception as e:
-            print(e)
+    # if USE_VUI:
+    #     try:
+    #         # Text-to-speech
+    #         polly.synthesize(reply)
+    #     except Exception as e:
+    #         print(e)
         
 
 def get_input():

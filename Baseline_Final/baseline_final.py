@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import base64
 import keyboard
@@ -37,6 +38,7 @@ class BaselineFinal:
             self.user = user
             self.description = open(os.path.join(SCRIPT_DIR, "descriptions", "{}.txt".format(self.user)), 'r', encoding='utf-8').read()
             self.system_guide = open(os.path.join(SCRIPT_DIR, "prompts", "system_guide"), 'r', encoding='utf-8').read()
+            self.retrieve_guide = open(os.path.join(SCRIPT_DIR, "prompts", "retrieve_guide"), 'r', encoding='utf-8').read()
             self.introduction_guide = open(os.path.join(SCRIPT_DIR, "prompts", "introduction_guide"), 'r', encoding='utf-8').read()
             
             # Chat History
@@ -52,6 +54,7 @@ class BaselineFinal:
                 "reply_history": [],
                 "description": self.description,
                 "system_guide": self.system_guide,
+                "retrieve_guide": self.retrieve_guide,
                 "introduction_guide": self.introduction_guide
             }
             
@@ -64,6 +67,7 @@ class BaselineFinal:
             self.reply_history = self.log["reply_history"]
             self.description = self.log["description"]
             self.system_guide = self.log["system_guide"]
+            self.retrieve_guide = self.log["retrieve_guide"]
             self.introduction_guide = self.log["introduction_guide"]
             
             self.dialogue_turn = self.reply_history[-1]["dialogue_turn"]
@@ -75,6 +79,7 @@ class BaselineFinal:
         # ________ OpenAI client ________
         self.client = OpenAI(api_key=api_key, timeout=TIME_OUT)
         self.lock = threading.Lock()
+        self.description_pieces = self.description.split("\n")
         
         # ______ Log Path _______
         log_prefix = self.user + '_' + datetime.now().strftime("%Y%m%d")
@@ -125,25 +130,79 @@ class BaselineFinal:
     #
     #
     # ________________________ Replier ________________________
+    
+    def encode_image(self, image_path):
+        with open(image_path, "rb") as image_file:
+            return base64.b64encode(image_file.read()).decode('utf-8')
 
-    def replier(self, user_input):
-        content = [{"role": "system", "content": self.system_guide},
-                   {"role": "user", "content": self.description}]
+    def replier(self, user_input, pics_id):
+        content = [{"role": "system", "content": self.system_guide}]
         content.extend(self.chat_history[(-6 if len(self.chat_history)>=6 else 0):])
+        
+        current_content = [{
+                "type": "text",
+                "text": ""
+            }]  
+        description_that_has_me = []
+        for pic_id in pics_id:
+            photo_path = os.path.join(SCRIPT_DIR, "photos", self.user, str(pic_id)+".jpeg")
+            try:
+                base64_img = self.encode_image(photo_path)
+            except Exception as e:
+                print(e)
+                print("编码照片{}失败，请查看路径是否正确，并决定是否中断实验重试。".format(photo_path))
+                continue
+            
+            current_piece = self.description_pieces[pic_id-1].split("\t")[-1]
+            if "你" in current_piece or "您" in current_piece:
+                current_piece = current_piece.replace("你", "我")
+                current_piece = current_piece.replace("您", "我")
+                description_that_has_me.append(current_piece)
+            
+            current_content.append({
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:image/jpg;base64,{base64_img}"
+                    }
+                })
+            
+        if len(description_that_has_me) > 0:
+            text_input = "{} 其中，我有出现的画面是：{}".format(user_input, ";".join(description_that_has_me))
+        else:
+            text_input = "{} 请注意，我并没有出现在这几张照片中。".format(user_input)
+        
+        current_content[0]["text"] = text_input
+        print("vqa输入：", text_input)
+        content.append({"role": "user", "content": current_content})
+        
+        reply = self.call_llm(content)  
+        # print("GPT回复：", reply)          
+        return reply
+    
+    
+    def photo_retriever(self, user_input):
+        content = [{
+            "role": "system", 
+            "content": self.retrieve_guide + '\n' + \
+                        self.description + '\n' + \
+                        "以上为全部照片描述。\n请确保返回格式为：[照片编号1, 照片编号2, ...]。" }]
+        content.extend(self.chat_history[(-3 if len(self.chat_history)>=3 else 0):])
         content.append({"role": "user", "content": user_input})
         
-        result = self.call_llm(content)
-        print("GPT回复：", result)
-        try:
-            splits = result.split("-", 1)
-            reply = splits[1]
-            pics_id = splits[0]
+        result = self.call_llm(content)        
+        print("相关照片：", result)
+        
+        try:          
+            pics_id = re.findall(r'\d+', result)
+            pics_id = [int(id) for id in pics_id]
+            if len(pics_id) > 3:
+                pics_id = pics_id[:3]
+            
         except Exception as e:
             print(e)
-            reply = result
             pics_id = []
             
-        return reply, pics_id
+        return pics_id
     
     #
     #
@@ -158,8 +217,9 @@ class BaselineFinal:
 
         return reply
     
-    def chat(self, user_input):
-        reply, pics_id = self.replier(user_input)
+    def chat(self, user_input):        
+        pics_id = self.photo_retriever(user_input)
+        reply = self.replier(user_input, pics_id)
 
         self.chat_history.append({"role": "user", "content": user_input})
         self.chat_history.append({"role": "assistant", "content": reply})

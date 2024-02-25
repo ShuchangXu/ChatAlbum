@@ -397,13 +397,12 @@ class ReviverPro:
         else:
             console_log("Follow-up Topics (E for next, null for none):"+self.topic_to_discuss())
             tid_str = input("tid:").replace(" ", "")
-            if tid_str == "":
-                return None
+            if tid_str.isDigit():
+                return int(tid_str)
             elif tid_str == "E":
                 return "E"
             else:
-                return int(tid_str)
-
+                return None
         
     
     def event_intro(self):

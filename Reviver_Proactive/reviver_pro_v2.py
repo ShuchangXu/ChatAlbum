@@ -407,7 +407,7 @@ class ReviverPro:
         
     
     def event_intro(self):
-        reply = "这是您照片中的第{}个场景,".format(self.shorts[self.curEid], str(self.curEid+1))
+        reply = "您照片中的第{}个场景是{}。".format(str(self.curEid+1), self.shorts[self.curEid])
         reply += self.events[self.curEid]
         reply += "我的描述准确吗?"
 

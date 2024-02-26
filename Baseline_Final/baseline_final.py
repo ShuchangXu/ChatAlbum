@@ -25,6 +25,17 @@ def json_parser(content):
     
     return json_response
 
+def human_check_reply(llm_reply, reply_type="reply"):
+    print("\n【实验后台】Human Check LLM's {}:".format(reply_type), llm_reply)
+    admin_input = input("【实验后台】Press \"Enter\" to accept, otherwise please input a corrected {}:".format(reply_type))
+    reply = llm_reply
+    
+    if admin_input == "":
+        print("【实验后台】LLM's {} is accepted.".format(reply_type))
+        return reply
+    else:
+        print("【实验后台】Corrected {} is accepted.".format(reply_type))
+        return admin_input
 
 
 class BaselineFinal:
@@ -105,11 +116,12 @@ class BaselineFinal:
         
         return result
 
-    def record_current_dialogue_turn(self, user_input, reply, pics_id):
+    def record_current_dialogue_turn(self, user_input, raw_reply, reply, pics_id):
         self.dialogue_turn += 1
         self.log["reply_history"].append({
             "dialogue_turn": self.dialogue_turn,
             "user_input": user_input,
+            "raw_reply": raw_reply,
             "reply": reply,
             "pics_id": pics_id
         })
@@ -210,19 +222,21 @@ class BaselineFinal:
     def introduction(self):        
         content = [{"role": "system", "content": self.introduction_guide},
                    {"role": "user", "content": self.description}]
-        reply = "让我先概述一下相册的内容吧！" + self.call_llm(content)
+        raw_reply = "让我先概述一下相册的内容吧！" + self.call_llm(content)
+        reply = human_check_reply(raw_reply)
         
         self.chat_history.append({"role": "assistant", "content": reply})
-        self.record_current_dialogue_turn(None, reply, [])
+        self.record_current_dialogue_turn(None, raw_reply, reply, [])
 
         return reply
     
     def chat(self, user_input):        
         pics_id = self.photo_retriever(user_input)
-        reply = self.replier(user_input, pics_id)
+        raw_reply = self.replier(user_input, pics_id)
+        reply = human_check_reply(raw_reply)
 
         self.chat_history.append({"role": "user", "content": user_input})
         self.chat_history.append({"role": "assistant", "content": reply})
-        self.record_current_dialogue_turn(user_input, reply, pics_id)
+        self.record_current_dialogue_turn(user_input, raw_reply, reply, pics_id)
         
         return reply

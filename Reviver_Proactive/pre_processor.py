@@ -48,6 +48,7 @@ class Photo_PreProcessor:
                 "super_event":"",
                 "evtStr": "",
                 "events": [],
+                "metas": [],
                 "shorts": [],
                 "photos": [],
                 "topics": [],
@@ -179,6 +180,7 @@ class Photo_PreProcessor:
     def build_m_tree(self, slice_locs):
         photos = []
         events = []
+        metas = []
         shorts = []
         topics = []
         evtStr = ""
@@ -195,12 +197,14 @@ class Photo_PreProcessor:
 
             photos.append(pid_list)
             events.append(event_dict["event"])
+            metas.append("有{}张照片".format(str(len(pid_list))))
             shorts.append(event_dict["short"])
             topics.append(event_dict["topics"])
             evtStr += str(i) + " " + event_dict["short"] + "\n"
                 
         self.mtree["photos"]=photos
         self.mtree["events"]=events
+        self.mtree["metas"]=metas
         self.mtree["shorts"]=shorts
         self.mtree["topics"]=topics
         self.mtree["evtStr"]=evtStr

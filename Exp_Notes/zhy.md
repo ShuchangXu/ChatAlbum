@@ -1,4 +1,4 @@
-# 系统介绍
+## 系统介绍
 
 - **系统目标：**我们设计了两款对话机器人，帮助你 (1) 理解一组照片 (2) 回忆当时的经历 (3) 低负担的对话体验。
 
@@ -170,11 +170,10 @@
 
 
 - **Comparison (advantages & disadvantages)**
-
   - Memory Reviver vs. the Baseline
   - **Compared to Current Practices**
   - **Compared to a Sighted Friend**
-
+  
   
 
 - **Suggestions**

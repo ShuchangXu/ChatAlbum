@@ -2,7 +2,7 @@ import os
 import time
 import keyboard
 from voice_interface import Recorder, Polly
-from reviver_pro_v2 import ReviverPro
+from reviver_pro_v3 import ReviverPro
 from dotenv import load_dotenv
 
 user = "zhy_1"
@@ -33,7 +33,9 @@ def get_input():
                 print("User:"+user_input)
                 return user_input
     else:
-        user_input = input("\nUser:")
+        user_input = ""
+        while user_input in ("", "E", "e", "S", "s", "O", "o"):
+            user_input = input("\nUser:").replace(" ","")
         return user_input
 
 

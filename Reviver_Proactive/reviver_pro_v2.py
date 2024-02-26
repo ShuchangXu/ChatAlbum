@@ -397,7 +397,7 @@ class ReviverPro:
         else:
             console_log("Follow-up Topics (E for next, null for none):"+self.topic_to_discuss())
             tid_str = input("tid:").replace(" ", "")
-            if tid_str.isDigit():
+            if tid_str.isdigit():
                 return int(tid_str)
             elif tid_str == "E":
                 return "E"
@@ -408,7 +408,6 @@ class ReviverPro:
     def event_intro(self):
         reply = "您照片中的第{}个场景是{}。".format(str(self.curEid+1), self.shorts[self.curEid])
         reply += self.events[self.curEid]
-        reply += "我的描述准确吗?"
 
         self.isEventTalked[self.curEid] = True
 

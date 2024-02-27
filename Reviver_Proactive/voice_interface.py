@@ -54,8 +54,12 @@ class Polly:
         self.client = Session(profile_name="default").client("polly")
 
     def synthesize(self, text):
+        has_synthesized = False
+        
         def timeout_handler(signum, frame):
-            raise TimeoutError("Code execution timed out")
+            if not has_synthesized:
+                print("TTS超时，请人工读出答案。")
+                raise TimeoutError("Code execution timed out")
 
         signal.signal(signal.SIGALRM, timeout_handler)
         signal.alarm(5) #超时秒数限制
@@ -63,8 +67,8 @@ class Polly:
         try:            
             response = self.client.synthesize_speech(
                 LanguageCode="cmn-CN", Text=text, OutputFormat="pcm", VoiceId="Zhiyu", Engine="neural")
+            has_synthesized = True
         except TimeoutError:
-            print("TTS超时，请人工读出答案。")
             return
         finally:
             signal.alarm(0)

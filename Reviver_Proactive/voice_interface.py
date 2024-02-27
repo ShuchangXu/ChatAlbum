@@ -79,23 +79,27 @@ class Polly:
             # number of parallel connections. Here we are using contextlib.closing to
             # ensure the close method of the stream object will be called automatically
             # at the end of the with statement's scope.  
-                print("TTS请求成功，若需中断语音请按空格键：")              
-                with closing(response["AudioStream"]) as pcm_stream:  
-                    p = pyaudio.PyAudio()
-                    stream = p.open(format=FORMAT,
-                                    channels=CHANNELS,
-                                    rate=RATE,
-                                    output=True)
+                print("TTS请求成功，若需中断语音请按空格键：") 
+                try:             
+                    with closing(response["AudioStream"]) as pcm_stream:  
+                        p = pyaudio.PyAudio()
+                        stream = p.open(format=FORMAT,
+                                        channels=CHANNELS,
+                                        rate=RATE,
+                                        output=True)
 
-                    while True:
-                        data = pcm_stream.read(CHUNK)
-                        if not data or keyboard.is_pressed("space"):
-                            break
-                        stream.write(data)
+                        while True:
+                            data = pcm_stream.read(CHUNK)
+                            if not data or keyboard.is_pressed("space"):
+                                break
+                            stream.write(data)
 
-                    stream.stop_stream()
-                    stream.close()
-                    p.terminate()                
+                        stream.stop_stream()
+                        stream.close()
+                        p.terminate()   
+                except Exception as e:
+                    print(e)
+                    print("TTS朗读结果异常中断，请人工继续读出答案。")             
         else:
             # The response didn't contain audio data, exit gracefully
             print("TTS失败，请人工读出答案。")

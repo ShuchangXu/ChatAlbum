@@ -4,6 +4,7 @@ import wave
 import pyaudio
 import keyboard
 import requests
+import signal
 import os
 
 import boto3
@@ -53,14 +54,38 @@ class Polly:
         self.client = Session(profile_name="default").client("polly")
 
     def synthesize(self, text):
-        response = self.client.synthesize_speech(
-            LanguageCode="cmn-CN", Text=text, OutputFormat="pcm", VoiceId="Zhiyu", Engine="neural")
+        has_synthesized = False
         
+        def timeout_handler_1(signum, frame):
+            if not has_synthesized:
+                print("TTS超时，请人工读出答案。")
+                raise TimeoutError("Code execution timed out")
+
+        signal.signal(signal.SIGALRM, timeout_handler_1)
+        signal.alarm(5) #超时秒数限制
+
+        try:            
+            response = self.client.synthesize_speech(
+                LanguageCode="cmn-CN", Text=text, OutputFormat="pcm", VoiceId="Zhiyu", Engine="neural")
+            has_synthesized = True
+        except TimeoutError:
+            return
+        finally:
+            signal.alarm(0)
+        
+        
+        
+        def timeout_handler_2(signum, frame):
+            print("TTS朗读结果异常中断，请人工继续读出答案。")
+            raise TimeoutError("Code execution timed out")
+        signal.signal(signal.SIGALRM, timeout_handler_2)
+            
         if "AudioStream" in response:
             # Note: Closing the stream is important because the service throttles on the
             # number of parallel connections. Here we are using contextlib.closing to
             # ensure the close method of the stream object will be called automatically
-            # at the end of the with statement's scope.                
+            # at the end of the with statement's scope.  
+                print("TTS请求成功，若需中断语音请按空格键：") 
                 with closing(response["AudioStream"]) as pcm_stream:  
                     p = pyaudio.PyAudio()
                     stream = p.open(format=FORMAT,
@@ -69,17 +94,28 @@ class Polly:
                                     output=True)
 
                     while True:
-                        data = pcm_stream.read(CHUNK)
-                        if not data or keyboard.is_pressed("space"):
+                        signal.alarm(2)                            
+                        try:
+                            data = pcm_stream.read(CHUNK)
+                            if not data or keyboard.is_pressed("space"):
+                                break
+                            stream.write(data)
+                        except:
                             break
-                        stream.write(data)
+                        finally:
+                            signal.alarm(0)
 
                     stream.stop_stream()
                     stream.close()
-                    p.terminate()                
+                    p.terminate()   
+                # except Exception as e:
+                #     print(e)
+                #     print("TTS朗读结果异常中断，请人工继续读出答案。")  
+                # finally:
+                #     signal.alarm(0)           
         else:
             # The response didn't contain audio data, exit gracefully
-            print("合成语音失败")
+            print("TTS失败，请人工读出答案。")
     
     
 

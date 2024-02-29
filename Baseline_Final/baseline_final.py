@@ -148,7 +148,12 @@ class BaselineFinal:
             return base64.b64encode(image_file.read()).decode('utf-8')
 
     def replier(self, user_input, pics_id):
-        content = [{"role": "system", "content": self.system_guide}]
+        content = [{
+            "role": "system", 
+            "content": self.system_guide + '\n' + \
+                        self.description + '\n' + \
+                        "以上为全部照片描述。请不要使用“第x张照片”、“这x张照片”等字眼。请确保你的回答不超过100个汉字。"
+            }]
         content.extend(self.chat_history[(-6 if len(self.chat_history)>=6 else 0):])
         
         current_content = [{
@@ -222,6 +227,7 @@ class BaselineFinal:
     def introduction(self):        
         content = [{"role": "system", "content": self.introduction_guide},
                    {"role": "user", "content": self.description}]
+                #    {"role": "user", "content": "以上为全部照片的文字描述。你的回答不要超过100个汉字。"}]
         raw_reply = "让我先概述一下相册的内容吧！" + self.call_llm(content)
         reply = human_check_reply(raw_reply)
         

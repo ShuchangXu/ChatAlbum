@@ -60,6 +60,7 @@ class Photo_PreProcessor:
         self.single_photo_prompt = open(os.path.join(SCRIPT_DIR, "prompts", "single_photo_extraction"), 'r', encoding='utf-8').read()
         self.slicing_prompt = open(os.path.join(SCRIPT_DIR, "prompts", "slicing"), 'r', encoding='utf-8').read()
         self.event_prompt = open(os.path.join(SCRIPT_DIR, "prompts", "event_extraction"), 'r', encoding='utf-8').read()
+        self.loc_prompt = open(os.path.join(SCRIPT_DIR, "prompts", "exact_loc"), 'r', encoding='utf-8').read()
     
     def save_m_tree(self, save_path=None): 
         if not save_path:
@@ -96,7 +97,7 @@ class Photo_PreProcessor:
         with open(image_path, "rb") as image_file:
             return base64.b64encode(image_file.read()).decode('utf-8')
         
-    def vqa(self, prompt, pid, meta_data=""):
+    def vqa(self, prompt, pid, meta_data="",return_json=True):
         current_content = [{
             "type": "text",
             "text": prompt,
@@ -130,9 +131,12 @@ class Photo_PreProcessor:
         reply_string = self.call_llm(content)
         print(reply_string+",")
 
-        reply_dict = json_parser(reply_string)
-
-        return reply_dict
+        if return_json:
+            reply_dict = json_parser(reply_string)
+            return reply_dict
+        
+        else:
+            return reply_string
     
     def single_photo_extraction(self, pid):
         meta_data = ""
@@ -143,6 +147,10 @@ class Photo_PreProcessor:
         reply_dict["id"] = pid
 
         return reply_dict
+    
+    def single_photo_exact_location(self, pid):
+        loc = self.vqa(self.loc_prompt, pid, "",False)
+        return loc
     
     def batch_photo_extraction(self, pid_bgn, p_cnt):
         for pid in range(pid_bgn, pid_bgn + p_cnt):

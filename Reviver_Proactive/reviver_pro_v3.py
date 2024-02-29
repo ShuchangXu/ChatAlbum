@@ -333,18 +333,19 @@ class ReviverPro:
 
         for i in range(len(talked)):
             if not talked[i]:
-                candidates += str(i) + " " + topics[i] + "\n"
+                candidates += str(i) + " 此外，我注意到:" + topics[i] + "你有印象吗\n"
         return candidates
     
     def sug_next(self):
+        done, todo, next = self.discuss_progress()
         if self.wandering:# if wandering, then go back
-            inspiration = "{}场景的关键信息都聊过了。要不要回到刚才在聊的场景呢?刚才的场景是:{}。".format(self.shorts[self.curEid], self.shorts[self.forwardProgress])
+            inspiration = "{}场景中的主要信息都聊完了。要不要换个呢?刚刚还没聊场景是:{}。".format(self.shorts[self.curEid], next)
         
-        elif self.curEid == self.evtCnt - 1:# if no more topics, then suggest generating a summary
-            inspiration = "这组照片的内容都完全聊过了。你还有更多问题吗?没有的话, 我会为您生成一段文字回忆录。".format(self.shorts[self.curEid])
+        elif next == "":# if no more topics, then suggest generating a summary
+            inspiration = "这组照片的内容都聊过了。{}。你还有更多问题吗?没有的话, 我会为您生成一段文字回忆录。".format(done)
         
         else:# if there is at least one new topic, then suggest moving on to the next topic
-            inspiration = "{}场景的关键信息都聊过了。要不要聊下一个场景呢?下一个场景是:{}。".format(self.shorts[self.curEid], self.shorts[self.curEid + 1])
+            inspiration = "{}场景中的主要信息都聊完了。要不要聊下一个呢?下一个场景是:{}。".format(self.shorts[self.curEid], next)
         
         return inspiration
 
@@ -357,22 +358,22 @@ class ReviverPro:
         candidates += self.topic_to_discuss()
         candidates += "E " + nextE + "\n"
         
-        console_log("Inspiration Candidates:\n"+candidates)
-        tid_str = input("tid:").replace(" ", "")
+        # console_log("Inspiration Candidates:\n"+candidates)
+        # tid_str = input("tid:").replace(" ", "")
 
-        inspiration = ""
-        if tid_str.isdigit():
-            tid = int(tid_str)
-            inspiration = "从照片中，我还注意到:" + self.topics[self.curEid][tid]
-            self.isTopicTalked[self.curEid][tid] = True
-        elif tid_str in ("I", 'i'):
-            inspiration = intro
-        elif tid_str == ("E", 'e'):
-            inspiration = nextE
-        else:
-            pass
+        # inspiration = ""
+        # if tid_str.isdigit():
+        #     tid = int(tid_str)
+        #     inspiration = "从照片中，我还注意到:" + self.topics[self.curEid][tid]
+        #     self.isTopicTalked[self.curEid][tid] = True
+        # elif tid_str in ("I", 'i'):
+        #     inspiration = intro
+        # elif tid_str in ("E", 'e'):
+        #     inspiration = nextE
+        # else:
+        #     pass
         
-        return inspiration
+        return candidates
     
     #
     #
@@ -401,9 +402,46 @@ class ReviverPro:
         
         return eid
     
+    def discuss_progress(self):
+        discussed = []
+        todiscuss = []
+
+        done_reply = ""
+        todo_reply = ""
+        next_todo = ""
+
+        for i in range(self.evtCnt):
+            desc = "场景{}:{},{}.".format(str(i+1), self.shorts[i], self.metas[i])
+            if self.isEventTalked[i]:
+                discussed.append(desc)
+            else:
+                todiscuss.append(desc)
+        
+        if len(discussed) == 0:
+            done_reply = ""
+        else:
+            done_reply = "我们聊过了以下场景:"
+            done_reply += ''.join(discussed)
+        
+        if len(todiscuss) == 0:
+            todo_reply = "所有场景都简单聊过了。"
+        else:
+            next_todo = todiscuss[0]
+            todo_reply = "还有以下场景没有聊过:"
+            todo_reply += ''.join(todiscuss)
+            todo_reply += "你想聊哪一个呢?"
+
+        return done_reply, todo_reply, next_todo
+    
     def state_controller(self):
         # determine the event
         eid = self.event_selector()
+
+        for i in range(self.evtCnt):
+            if self.isEventTalked[i]:
+                self.forwardProgress = i
+            else:
+                break
 
         if eid == eType.NONE or eid == self.curEid:
             pass
@@ -414,22 +452,23 @@ class ReviverPro:
             self.overviewing = True
         else:
             if self.wandering:
-                if eid == eType.NEXT or eid == eType.PREV or eid == self.forwardProgress:
+                if eid == eType.PREV or eid == self.forwardProgress:
                     self.wandering = False
                     self.curEid = self.forwardProgress
+                elif eid == eType.NEXT or eid == self.forwardProgress + 1:
+                    self.wandering = False
+                    self.curEid = self.forwardProgress + 1
                 else:
                     self.curEid = eid
             else:
                 if (eid == eType.NEXT and self.curEid < self.evtCnt - 1) or eid == self.curEid + 1:
                     self.curEid += 1
                     self.forwardProgress = self.curEid
-
                 elif (eid == eType.NEXT and self.curEid == self.evtCnt - 1):
                     self.summarizing = True
                 elif eid == eType.PREV:
                     self.wandering = True
                     self.curEid -= 1
-                
                 else:
                     self.wandering = True
                     self.curEid = eid
@@ -457,15 +496,13 @@ class ReviverPro:
         reply += self.call_llm(content, max_tokens=800)
 
         return reply
-
+    
     def overview(self):
-        candidates = ""
-        candidates += self.superE + "\n"
-        
-        for i in range(len(self.shorts)):
-            candidates += str(i) + " " + self.shorts[i] + " " + self.metas[i] + "\n"
+        done, todo = self.discuss_progress()
+
+        progress = done + todo
             
-        return candidates
+        return progress
 
     def chat(self, user_input):
         self.commandEid = None
@@ -479,11 +516,10 @@ class ReviverPro:
             reply = self.overview()
         else:
             self.isEventTalked[self.curEid] = True
-            plain_reply = self.replier(user_input)
-            console_log("Plain_Reply:"+plain_reply)
-            inspiration = self.inspirer()
-            console_log("Inspiration:"+inspiration)
-            reply = plain_reply + inspiration
+            reply = self.replier(user_input)
+            console_log("Plain_Reply:"+reply)
+            inspirations = self.inspirer()
+            console_log("Inspiration:"+inspirations)
         
         corrected_reply = human_check_reply(reply) # None if original reply is accepted
         self.record_current_dialogue_turn(user_input, reply, corrected_reply)

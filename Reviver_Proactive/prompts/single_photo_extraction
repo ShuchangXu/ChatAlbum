@@ -28,7 +28,7 @@ Please extract the following items based on the second photo and its metadata:
     For animals, please include their species and visual details (color).
     For food, please include their name, shape, and color.
     For landmarks, please include their name, and color.
-    For texts, please include the original text, and the place it is showed on the picture (e.g., on an envelope, on a billboard, etc).
+    For texts, please include the original text and translate it into Chinese, and the place it is showed on the picture (e.g., on an envelope, on a billboard, etc).
     For any other objects, please include details like shapes, colors, and functions.
 
     Here are several good examples:

@@ -6,7 +6,7 @@ from reviver_pro_v3 import ReviverPro
 from dotenv import load_dotenv
 
 user = "zlj_2"
-resume = None
+resume = "zlj_2_20240301_2.log"
 
 USE_VUI = True
 recorder = Recorder()

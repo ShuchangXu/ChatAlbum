@@ -123,7 +123,7 @@ class ReviverPro:
             self.events = self.log["mtree"]["events"]
             self.evtCnt = self.log["mtree"]["evtCnt"]
             self.evtStr = self.log["mtree"]["evtStr"]
-            self.shorts = self.log["mtree"]["metas"]
+            self.metas = self.log["mtree"]["metas"]
             self.shorts = self.log["mtree"]["shorts"]
             self.photos = self.log["mtree"]["photos"]
             self.topics = self.log["mtree"]["topics"]
@@ -411,7 +411,7 @@ class ReviverPro:
         next_todo = ""
 
         for i in range(self.evtCnt):
-            desc = "场景{}:{}.".format(str(i+1), self.shorts[i])#, self.metas[i])
+            desc = "场景{}:{},{}.".format(str(i+1), self.shorts[i], self.metas[i])
             if self.isEventTalked[i]:
                 discussed.append(desc)
             else:

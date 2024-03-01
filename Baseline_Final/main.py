@@ -5,7 +5,7 @@ from voice_interface import Recorder, Polly
 from baseline_final import BaselineFinal
 from dotenv import load_dotenv
 
-user = "zlj_1"
+user = "hjs_1"
 resume = None#"zhy_2_20240222_2.log"
 
 USE_VUI = True

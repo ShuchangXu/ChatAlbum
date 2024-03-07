@@ -97,7 +97,7 @@ class Photo_PreProcessor:
 if __name__ == "__main__":
     load_dotenv()
     api_key=os.getenv("GPT_API_KEY")
-    user = "hjs_1"
+    user = "wmq_2"
     
     des_extraction_guide = open(os.path.join(SCRIPT_DIR, "prompts", "photo_des_guide"), 'r', encoding='utf-8').read()
     Processor = Photo_PreProcessor(api_key, MODEL, MAX_TOKENS, user, des_extraction_guide)

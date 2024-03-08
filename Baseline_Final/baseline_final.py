@@ -160,7 +160,7 @@ class BaselineFinal:
                 "type": "text",
                 "text": ""
             }]  
-        description_that_has_me = []
+        # description_that_has_me = []
         for pic_id in pics_id:
             photo_path = os.path.join(SCRIPT_DIR, "photos", self.user, str(pic_id)+".jpeg")
             try:
@@ -170,11 +170,11 @@ class BaselineFinal:
                 print("编码照片{}失败，请查看路径是否正确，并决定是否中断实验重试。".format(photo_path))
                 continue
             
-            current_piece = self.description_pieces[pic_id-1].split("\t")[-1]
-            if "你" in current_piece or "您" in current_piece:
-                current_piece = current_piece.replace("你", "我")
-                current_piece = current_piece.replace("您", "我")
-                description_that_has_me.append(current_piece)
+            # current_piece = self.description_pieces[pic_id-1].split("\t")[-1]
+            # if "你" in current_piece or "您" in current_piece:
+            #     current_piece = current_piece.replace("你", "我")
+            #     current_piece = current_piece.replace("您", "我")
+            #     description_that_has_me.append(current_piece)
             
             current_content.append({
                     "type": "image_url",
@@ -183,13 +183,13 @@ class BaselineFinal:
                     }
                 })
             
-        if len(description_that_has_me) > 0:
-            text_input = "{} 其中，我有出现的画面是：{}".format(user_input, ";".join(description_that_has_me))
-        else:
-            text_input = "{} 请注意，我并没有出现在这几张照片中。".format(user_input)
+        # if len(description_that_has_me) > 0:
+        #     text_input = "{} 其中，我有出现的画面是：{}".format(user_input, ";".join(description_that_has_me))
+        # else:
+        #     text_input = "{} 请注意，我并没有出现在这几张照片中。".format(user_input)
         
-        current_content[0]["text"] = text_input
-        print("vqa输入：", text_input)
+        current_content[0]["text"] = user_input
+        # print("vqa输入：", user_input)
         content.append({"role": "user", "content": current_content})
         
         reply = self.call_llm(content)  
@@ -228,7 +228,7 @@ class BaselineFinal:
         content = [{"role": "system", "content": self.introduction_guide},
                    {"role": "user", "content": self.description}]
                 #    {"role": "user", "content": "以上为全部照片的文字描述。你的回答不要超过100个汉字。"}]
-        raw_reply = "让我先概述一下相册的内容吧！" + self.call_llm(content)
+        raw_reply = self.call_llm(content)
         reply = human_check_reply(raw_reply)
         
         self.chat_history.append({"role": "assistant", "content": reply})

@@ -1,0 +1,629 @@
+{
+    "user": "wmq_1",
+    "resume": null,
+    "datetime": "2024-03-09-20:29",
+    "photo_dir": "/Users/codaxu/Documents/ChatAlbum/Reviver_Proactive/photos/wmq_1",
+    "chat_history": [
+        {
+            "role": "assistant",
+            "content": "这组照片一共有34张，记录了可能是在杭州的活动。为了帮助您理解，我把照片分成了8个场景。分别是:1是 室内吃面包和品尝咖啡, 2是 乘坐飞机, 3是 西湖边阴天留影, 4是 在可能是周总理宴请外宾的餐厅用餐, 5是 餐桌上的美食, 6是 西湖漫步和乘船, 7是 游览雷峰塔, 8是 室内主题演讲。我们从第一个场景聊起吧，第一个场景是室内吃面包和品尝咖啡。"
+        },
+        {
+            "role": "user",
+            "content": "好"
+        },
+        {
+            "role": "assistant",
+            "content": "照片中的第1个场景是室内吃面包和品尝咖啡。一共有2张照片，记录了你在室内和另一位格子衬衫男士一起吃面包，以及品尝咖啡的场景。根据你们吃的食物判断，这个地方看起来像是餐厅或咖啡馆。室内明亮，照片中主要有你、朋友、餐桌、咖啡杯等。"
+        },
+        {
+            "role": "user",
+            "content": "好"
+        },
+        {
+            "role": "assistant",
+            "content": "好的.您照片中的第2个场景是乘坐飞机。一共有2张照片，记录了你在飞机上和另一位格子衬衫男士坐在飞机上的场景。根据窗户判断，这个场景的环境是飞机的客舱。照片中主要有你、另一个男性、紫色的飞机座椅和白色的飞机窗户。"
+        },
+        {
+            "role": "user",
+            "content": "是"
+        },
+        {
+            "role": "assistant",
+            "content": "根据照片判断，您可能在经济舱。我注意到:照片中，你的朋友坐在窗边，然后是你。这是飞往杭州的航班吗?你有印象吗"
+        },
+        {
+            "role": "user",
+            "content": "朋友是男性吗"
+        },
+        {
+            "role": "assistant",
+            "content": "我在照片里看到穿着条纹衣服的人旁边坐着一位男性，他身穿格子衫。乘坐飞机场景中的主要信息都聊完了。要不要聊下一个呢?下一个场景是:场景3:西湖边阴天留影,有4张照片.。"
+        },
+        {
+            "role": "user",
+            "content": "好"
+        },
+        {
+            "role": "assistant",
+            "content": "您照片中的第3个场景是西湖边阴天留影。一共有4张照片，记录了你在湖边的场景。根据亭子、长堤判断，这个地点可能是杭州西湖。天气阴天。照片中主要有湖泊、荷叶、亭子，长堤，远处山顶的塔和树木。在活动中，你在湖边微笑着站立，背着斜挎包，身穿带有蓝灰色条纹的长袖上衣。天气是阴天。你记得当时气温如何吗?你有印象吗"
+        }
+    ],
+    "mtree": {
+        "superE": "这组照片一共有34张，记录了可能是在杭州的活动。为了帮助您理解，我把照片分成了8个场景。分别是:1是 室内吃面包和品尝咖啡, 2是 乘坐飞机, 3是 西湖边阴天留影, 4是 在可能是周总理宴请外宾的餐厅用餐, 5是 餐桌上的美食, 6是 西湖漫步和乘船, 7是 游览雷峰塔, 8是 室内主题演讲。",
+        "events": [
+            "一共有2张照片，记录了你在室内和另一位格子衬衫男士一起吃面包，以及品尝咖啡的场景。根据你们吃的食物判断，这个地方看起来像是餐厅或咖啡馆。室内明亮，照片中主要有你、朋友、餐桌、咖啡杯等。",
+            "一共有2张照片，记录了你在飞机上和另一位格子衬衫男士坐在飞机上的场景。根据窗户判断，这个场景的环境是飞机的客舱。照片中主要有你、另一个男性、紫色的飞机座椅和白色的飞机窗户。",
+            "一共有4张照片，记录了你在湖边的场景。根据亭子、长堤判断，这个地点可能是杭州西湖。天气阴天。照片中主要有湖泊、荷叶、亭子，长堤，远处山顶的塔和树木。",
+            "一共有2张照片，记录了人们在餐厅用餐的场景，这个场景的环境在室内，光线充足，看起来像是中式餐厅。还有一张曾经该餐厅里政要接待外宾的旧照片，政要很可能是周恩来。",
+            "一共有3张照片，记录了不同美食，照片中主要有绿茶、豆干、东坡肉、荷叶饼和红烧鱼等美食。",
+            "一共有6张照片，记录了你在西湖边的活动。这个场景的环境多变，有室外阴天的湖畔，还有你乘船的照片。照片中主要有你，柳树和树木的轮廓，乘船。",
+            "一共有7张照片，记录了你参观雷峰塔的场景。这个场景的环境主要在室外，有时天气晴朗，有时看起来有点阴天或有雾。照片中主要有塔、湖泊、小岛、游客和船只。还有一张你在塔高层的照片。",
+            "一共有8张照片，记录了你在室内的公开演讲活动。其中有你在讲台上发言的照片、有写有'王孟琦'名牌的坐席、有写有'西湖全貌'壁画、有会议材料上面写着‘三生万物 2015年5月10日 中国 杭州’、此外还有挂有'龙泉宝剑'牌匾的商铺。"
+        ],
+        "evtCnt": 8,
+        "evtStr": "0 室内用餐和品尝咖啡\n1 飞机上的交谈\n2 湖边阴天留影\n3 餐厅用餐时刻\n4 室内美食体验\n5 西湖漫步乘船\n6 游览雷峰塔\n7 室内主题演讲\n",
+        "shorts": [
+            "室内吃面包和品尝咖啡",
+            "乘坐飞机",
+            "西湖边阴天留影",
+            "在可能是周总理宴请外宾的餐厅用餐",
+            "室内美食体验",
+            "西湖漫步乘船",
+            "游览雷峰塔",
+            "你在室内主题演讲"
+        ],
+        "metas": [
+            "有2张照片",
+            "有2张照片",
+            "有4张照片",
+            "有2张照片",
+            "有3张照片",
+            "有6张照片",
+            "有7张照片",
+            "有8张照片"
+        ],
+        "photos": [
+            [
+                1,
+                2
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                5,
+                6,
+                7,
+                8
+            ],
+            [
+                9,
+                10
+            ],
+            [
+                11,
+                12,
+                13
+            ],
+            [
+                14,
+                15,
+                16,
+                17,
+                18,
+                19
+            ],
+            [
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26
+            ],
+            [
+                27,
+                28,
+                29,
+                30,
+                31,
+                32,
+                33,
+                34
+            ]
+        ],
+        "topics": [
+            [
+                "你在室内品尝咖啡。你手拿着白色咖啡杯，咖啡顶部有奶白和咖啡色的泡沫。你记得那是什么咖啡吗?",
+                "照片中，你和一位男性朋友都留着黑色短发。你穿着蓝灰色带状条纹的长袖T恤，而朋友穿着白色蓝格子衬衫。你记得那位朋友是谁吗?",
+                "照片中的场景是现代装潢的餐厅或咖啡馆，背景中有玻璃墙面和电视。你还记得这些地方吗?"
+            ],
+            [
+                "照片中，你的朋友坐在窗边，然后是你。这是飞往杭州的航班吗?"
+            ],
+            [
+                "在活动中，你在湖边微笑着站立，背着斜挎包，身穿带有蓝灰色条纹的长袖上衣。天气是阴天。你记得当时气温如何吗?",
+                "其中一张照片中，你站在前景，远处的湖面上游一艘游船，游船是红色和黄色相间的。你有印象吗?",
+                "场景中有亭子、湖泊荷叶散布、山丘和装饰华丽的船等内容。这里面有你想了解的内容吗?"
+            ],
+            [
+                "餐厅的环境在室内，有中国传统的毛笔字画，写有'淡妆浓抹总相宜'，看起来像一个中式餐厅。你记得这个地方吗?",
+                "其中有一张翻拍的老照片, 上面写着1957年的字样。照片是黑白色调的, 记录了外貌很可能是周恩来总理的人, 在这间餐厅里接待外宾，对于这张老照片你有印象吗？"
+            ],
+            [
+                "照片展示了桌子上的一系列美食，包括有着绿色茶叶的茶杯、豆干、红烧肉、豆腐、荷叶状的面饼, 和红烧鱼。你还记得这些美食吗？"
+            ],
+            [
+                "你在林荫道路上留下了单人影像，路对面是白墙黑瓦的沿街商铺，招牌写着“楼外楼”。你还记得在此漫步的心情吗？",
+                "你穿着蓝白相间的长袖条纹衫，在湖边留下了单人影像，周围有柳树轮廓、湖面波光粼粼。这里是西湖边吗？",
+                "你在一艘船只上，船舱室内有木质装潢。你还记得乘船做了什么吗?"
+            ],
+            [
+                "在室外，照片拍到一座高大的古塔，周围环境有绿植和花坛装饰，根据这个塔的样貌判断可能是杭州雷峰塔。你记得塔的名字吗?",
+                "有一张照片，你的手向正上方举起，可能是在做出模仿塔尖的手势。我的描述准确吗？",
+                "有一张照片,显示你可能是站在塔的高层。你身穿蓝白相间的条纹衬衣靠在栏杆上,远处是黑顶白墙面的建筑。你还记得登塔的感受吗？"
+            ],
+            [
+                "一张照片中,你站在讲台上进行公开演讲，讲台是红色的。你身后屏幕上写有'世界那么大，我们要看见，王孟琦，视障工程师 信息无障碍研究会'的文字。你记得演讲内容吗?",
+                "会议室内装饰华丽，有坐席、讲台和大屏幕，其他参会人员穿着正式。其中一张照片显示了有会议材料上面写着‘三生万物’.你记得这个地方吗?",
+                "其中有一张汉字和荷花图案的纸张，背景是灰白色，上面有粉色的荷花。上面写着: 2015年5月10日 中国 杭州。主持 王海军。 断翅的鸟儿如何飞，乡村村残疾人自强之路， 齐乾坤。世界那么大，我们要看见 王孟琦。这些记录的是什么内容?",
+                "有一张照片记录了挂有'龙泉宝剑'牌匾的商铺。你记得这个地方吗?"
+            ]
+        ]
+    },
+    "reply_history": [
+        {
+            "dialogue_turn": 0,
+            "user_input": null,
+            "command_eid": null,
+            "original_reply": "这组照片一共有34张，记录了可能是在杭州的活动。为了帮助您理解，我把照片分成了8个场景。分别是:1是 室内吃面包和品尝咖啡, 2是 乘坐飞机, 3是 西湖边阴天留影, 4是 在可能是周总理宴请外宾的餐厅用餐, 5是 餐桌上的美食, 6是 西湖漫步和乘船, 7是 游览雷峰塔, 8是 室内主题演讲。我们从第一个场景聊起吧，第一个场景是室内吃面包和品尝咖啡。",
+            "corrected_reply": null
+        },
+        {
+            "dialogue_turn": 1,
+            "user_input": "好",
+            "command_eid": "0",
+            "original_reply": "",
+            "corrected_reply": "照片中的第1个场景是室内吃面包和品尝咖啡。一共有2张照片，记录了你在室内和另一位格子衬衫男士一起吃面包，以及品尝咖啡的场景。根据你们吃的食物判断，这个地方看起来像是餐厅或咖啡馆。室内明亮，照片中主要有你、朋友、餐桌、咖啡杯等。"
+        },
+        {
+            "dialogue_turn": 2,
+            "user_input": "好",
+            "command_eid": "E",
+            "original_reply": "",
+            "corrected_reply": "好的.您照片中的第2个场景是乘坐飞机。一共有2张照片，记录了你在飞机上和另一位格子衬衫男士坐在飞机上的场景。根据窗户判断，这个场景的环境是飞机的客舱。照片中主要有你、另一个男性、紫色的飞机座椅和白色的飞机窗户。"
+        },
+        {
+            "dialogue_turn": 3,
+            "user_input": "是",
+            "command_eid": "",
+            "original_reply": "",
+            "corrected_reply": "根据照片判断，您可能在经济舱。我注意到:照片中，你的朋友坐在窗边，然后是你。这是飞往杭州的航班吗?你有印象吗"
+        },
+        {
+            "dialogue_turn": 4,
+            "user_input": "朋友是男性吗",
+            "command_eid": "",
+            "original_reply": "你提到了朋友的性别。我在照片里看到穿着条纹衣服的人旁边坐着一位男性，他身穿格子衫。",
+            "corrected_reply": "我在照片里看到穿着条纹衣服的人旁边坐着一位男性，他身穿格子衫。乘坐飞机场景中的主要信息都聊完了。要不要聊下一个呢?下一个场景是:场景3:西湖边阴天留影,有4张照片.。"
+        },
+        {
+            "dialogue_turn": 5,
+            "user_input": "好",
+            "command_eid": "E",
+            "original_reply": "",
+            "corrected_reply": "您照片中的第3个场景是西湖边阴天留影。一共有4张照片，记录了你在湖边的场景。根据亭子、长堤判断，这个地点可能是杭州西湖。天气阴天。照片中主要有湖泊、荷叶、亭子，长堤，远处山顶的塔和树木。在活动中，你在湖边微笑着站立，背着斜挎包，身穿带有蓝灰色条纹的长袖上衣。天气是阴天。你记得当时气温如何吗?你有印象吗"
+        },
+        {
+            "dialogue_turn": 6,
+            "user_input": "雷峰塔",
+            "command_eid": "6",
+            "original_reply": "",
+            "corrected_reply": "您照片中的第7个场景是游览雷峰塔。一共有7张照片，记录了你参观雷峰塔的场景。这个场景的环境主要在室外，有时天气晴朗，有时看起来有点阴天或有雾。照片中主要有塔、湖泊、小岛、游客和船只。还有一张你在塔高层的照片。此外，我注意到:有一张照片，你的手向正上方举起，可能是在做出模仿塔尖的手势。我的描述准确吗？你有印象吗"
+        }
+    ],
+    "state_history": [
+        {
+            "dialogue_turn": 0,
+            "curEid": 0,
+            "commandEid": null,
+            "wandering": false,
+            "forwardProgress": 0,
+            "isEventTalked": [
+                true,
+                true,
+                true,
+                false,
+                false,
+                false,
+                true,
+                false
+            ],
+            "isTopicTalked": [
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false
+                ],
+                [
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false
+                ]
+            ],
+            "summarizing": false,
+            "overviewing": false
+        },
+        {
+            "dialogue_turn": 1,
+            "curEid": 0,
+            "commandEid": "0",
+            "wandering": false,
+            "forwardProgress": 0,
+            "isEventTalked": [
+                true,
+                true,
+                true,
+                false,
+                false,
+                false,
+                true,
+                false
+            ],
+            "isTopicTalked": [
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false
+                ],
+                [
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false
+                ]
+            ],
+            "summarizing": false,
+            "overviewing": false
+        },
+        {
+            "dialogue_turn": 2,
+            "curEid": 1,
+            "commandEid": "E",
+            "wandering": false,
+            "forwardProgress": 1,
+            "isEventTalked": [
+                true,
+                true,
+                true,
+                false,
+                false,
+                false,
+                true,
+                false
+            ],
+            "isTopicTalked": [
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false
+                ],
+                [
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false
+                ]
+            ],
+            "summarizing": false,
+            "overviewing": false
+        },
+        {
+            "dialogue_turn": 3,
+            "curEid": 1,
+            "commandEid": "",
+            "wandering": false,
+            "forwardProgress": 1,
+            "isEventTalked": [
+                true,
+                true,
+                true,
+                false,
+                false,
+                false,
+                true,
+                false
+            ],
+            "isTopicTalked": [
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false
+                ],
+                [
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false
+                ]
+            ],
+            "summarizing": false,
+            "overviewing": false
+        },
+        {
+            "dialogue_turn": 4,
+            "curEid": 1,
+            "commandEid": "",
+            "wandering": false,
+            "forwardProgress": 1,
+            "isEventTalked": [
+                true,
+                true,
+                true,
+                false,
+                false,
+                false,
+                true,
+                false
+            ],
+            "isTopicTalked": [
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false
+                ],
+                [
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false
+                ]
+            ],
+            "summarizing": false,
+            "overviewing": false
+        },
+        {
+            "dialogue_turn": 5,
+            "curEid": 2,
+            "commandEid": "E",
+            "wandering": false,
+            "forwardProgress": 2,
+            "isEventTalked": [
+                true,
+                true,
+                true,
+                false,
+                false,
+                false,
+                true,
+                false
+            ],
+            "isTopicTalked": [
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false
+                ],
+                [
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false
+                ]
+            ],
+            "summarizing": false,
+            "overviewing": false
+        },
+        {
+            "dialogue_turn": 6,
+            "curEid": 6,
+            "commandEid": "6",
+            "wandering": true,
+            "forwardProgress": 2,
+            "isEventTalked": [
+                true,
+                true,
+                true,
+                false,
+                false,
+                false,
+                true,
+                false
+            ],
+            "isTopicTalked": [
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false
+                ],
+                [
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false
+                ],
+                [
+                    false,
+                    false,
+                    false,
+                    false
+                ]
+            ],
+            "summarizing": false,
+            "overviewing": false
+        }
+    ]
+}

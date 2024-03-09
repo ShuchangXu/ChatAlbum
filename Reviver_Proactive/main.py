@@ -5,8 +5,8 @@ from voice_interface import Recorder, Polly
 from reviver_pro_v3 import ReviverPro
 from dotenv import load_dotenv
 
-user = "hjs_2"
-resume = None
+user = "wmq_1"
+resume = "wmq_1_20240309_1.log"
 
 USE_VUI = True
 recorder = Recorder()

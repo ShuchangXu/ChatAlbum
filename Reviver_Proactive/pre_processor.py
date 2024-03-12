@@ -111,7 +111,7 @@ class Photo_PreProcessor:
         })
         
         base64_img = self.encode_image(os.path.join(self.photo_dir, str(pid)+".jpeg"))
-        print(os.path.join(self.photo_dir, str(pid)+".jpeg"))
+        # print(os.path.join(self.photo_dir, str(pid)+".jpeg"))
             
         current_content.append({
             "type": "image_url",

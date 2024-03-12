@@ -10,15 +10,15 @@ if __name__ == "__main__":
     
     
     ### Generate photo descriptions
-    Processor = Photo_PreProcessor(api_key, user, has_meta_data=False)
-    Processor.batch_photo_extraction(1, 27)
-    Processor.save_m_tree()
+    # Processor = Photo_PreProcessor(api_key, user, has_meta_data=False)
+    # Processor.batch_photo_extraction(1, 27)
+    # Processor.save_m_tree()
     
     
     ### Slice photos and build m_tree
-    # Processor = Photo_PreProcessor(api_key, user, has_meta_data=False, old_mtree_file="memory_tree.json")
-    # slice_locs = [1,6,13,15,27,32,37,42]
-    # Processor.build_m_tree(slice_locs)
+    Processor = Photo_PreProcessor(api_key, user, has_meta_data=False, old_mtree_file="memory_tree.json")
+    slice_locs = [1, 12, 17, 22, 28]
+    Processor.build_m_tree(slice_locs)
     
     
 

@@ -333,7 +333,7 @@ class ReviverPro:
 
         for i in range(len(talked)):
             if not talked[i]:
-                candidates += str(i) + " 此外，我注意到:" + topics[i] + "你有印象吗\n"
+                candidates += str(i) + " 此外，我注意到:" + topics[i]
         return candidates
     
     def sug_next(self):

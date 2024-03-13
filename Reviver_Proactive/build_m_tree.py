@@ -11,7 +11,7 @@ if __name__ == "__main__":
     
     ### Generate photo descriptions
     # Processor = Photo_PreProcessor(api_key, user, has_meta_data=False)
-    # Processor.batch_photo_extraction(8, 1)
+    # Processor.batch_photo_extraction(7, 11)
     # Processor.save_m_tree()
     
     

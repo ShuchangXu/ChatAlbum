@@ -6,18 +6,18 @@ from pre_processor import Photo_PreProcessor
 if __name__ == "__main__":
     load_dotenv()
     api_key=os.getenv("GPT_API_KEY")
-    user = "liang_2"
+    user = "kelei_2"
     
     
     ### Generate photo descriptions
     # Processor = Photo_PreProcessor(api_key, user, has_meta_data=False)
-    # Processor.batch_photo_extraction(1, 27)
+    # Processor.batch_photo_extraction(8, 1)
     # Processor.save_m_tree()
     
     
     ### Slice photos and build m_tree
     Processor = Photo_PreProcessor(api_key, user, has_meta_data=False, old_mtree_file="memory_tree.json")
-    slice_locs = [1, 12, 17, 22, 28]
+    slice_locs = [1, 4, 8, 11, 14, 18]
     Processor.build_m_tree(slice_locs)
     
     

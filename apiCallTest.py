@@ -11,8 +11,8 @@ if __name__=="__main__":
     
     client = OpenAI(api_key=api_key, timeout=TIME_OUT)
     content = []
-    content.append({"role": "system", "content": "You are an assistant that helps me polish research papers. Please refine my writing."})
-    content.append({"role": "user", "content": "To illustrate Memory Reviver, we follow \textit{Robin}, a PVI who hopes to revisit a photo collection for a trip nine years ago. It happened so long ago that he hardly remembers anything about it. "})
+    content.append({"role": "system", "content": "You are an assistant that helps me polish research papers. Please re-organize my writing to make it sound logic."})
+    content.append({"role": "user", "content": "Participants saved photo collections for significant events such as trips, ceremonies, and gatherings (see Table~\ref{tab:demographics}). These collections were typically taken with sighted help, and as a result, they knew little about the photo contents. Because their insufficient understanding , participants hoped to \textbf{thoroughly explore} each collection during reminiscence. However, this need was hardly fulfilled by their current practices. "})
 
     response = client.chat.completions.create(
                 messages = content,

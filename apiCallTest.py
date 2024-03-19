@@ -11,8 +11,8 @@ if __name__=="__main__":
     
     client = OpenAI(api_key=api_key, timeout=TIME_OUT)
     content = []
-    content.append({"role": "system", "content": "You are an assistant that helps me polish research papers. Please re-organize my writing to make it sound logic."})
-    content.append({"role": "user", "content": "Participants saved photo collections for significant events such as trips, ceremonies, and gatherings (see Table~\ref{tab:demographics}). These collections were typically taken with sighted help, and as a result, they knew little about the photo contents. Because their insufficient understanding , participants hoped to \textbf{thoroughly explore} each collection during reminiscence. However, this need was hardly fulfilled by their current practices. "})
+    content.append({"role": "system", "content": "Please re-organize this paragraph to make it logically clear."})
+    content.append({"role": "user", "content": "Reminisce alongside sighted people allows PVI to use natural language to inquire information within a photo collection, recall associated memories, and enrich their understanding of past moments \cite{jung_so_2022,yoo_understanding_2021}. Such natural communications contribute to engaging reminiscence experiences \cite{jung_so_2022}. However, the reliance on sighted assistance limits the frequency and depth of reminiscence. To address this limitation, we focus on designing a chatbot that enables PVI to reminisce with a photo collection via natural-language communication."})
 
     response = client.chat.completions.create(
                 messages = content,
